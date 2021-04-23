@@ -1,6 +1,8 @@
 # Prisma Cloud Scan Action
-Scan container images for vulnerabilities and compliance issues using this GitHub action.
-This action is a wrapper around [twistcli](https://docs.twistlock.com/docs/compute_edition/tools/twistcli_scan_images.html) which connects to the specified Prisma Cloud Compute Console for vulnerability and compliance policy and metadata.
+The Prisma Cloud Scan Action will scan container images for vulnerabilities and compliance issues. Receive immediate feedback about image vulnerabilities and compliance violations both in GitHub and in the Prisma Cloud Console. Block merges that do not meet your compliance requirements, such as updates with critical vulnerabilities.
+
+This action is a wrapper around [twistcli](https://docs.twistlock.com/docs/compute_edition/tools/twistcli_scan_images.html) which connects to the specified Prisma Cloud Console for vulnerability and compliance policy and metadata.
+
 
 ## Usage
 ### Example of container image scanning
@@ -22,7 +24,7 @@ jobs:
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
 
-      - name: Prisma Cloud Compute scan
+      - name: Prisma Cloud image scan
         uses: PaloAltoNetworks/prisma-cloud-scan@v1
         with:
           pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
@@ -31,7 +33,10 @@ jobs:
           image_name: ${{ env.IMAGE_NAME }}
 ```
 
-## Inputs
+
+## Properties
+
+### Inputs
 | Input | Description | Required? | Default |
 |---|---|---|---|
 | `pcc_console_url` | URL of your Prisma Cloud Compute Console | Yes |  |
@@ -40,7 +45,22 @@ jobs:
 | `image_name` | Name (or ID) of the image to be scanned | Yes |  |
 | `results_file` | File to which scan results are written in JSON | No | `pcc_scan_results.json` |
 
-## Outputs
+### Output file
 | Output | Description |
 |---|---|
 | `results_file` | File to which scan results are written in JSON |
+
+## Control alerting and fail thresholds
+You can set the level for alerting and failing builds in the Prisma Cloud UI. For example, setting the alert threshold to Medium will not alert for Low severity vulnerabilities.
+<br /><br />
+<img src="./images/pc_ci_rule_example.png">
+
+
+## Results output
+The table of discovered vulnerabilities and compliance violations shows up in the GitHub workflow log and in the Prisma Cloud Console in the Monitor section.
+
+### GitHub workflow log
+<img src="./images/pc_github_log_output.png">
+
+### Prisma Cloud Console view
+<img src="./images/pc_ui_result.png">
