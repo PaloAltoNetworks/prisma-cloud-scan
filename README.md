@@ -1,5 +1,5 @@
 # Prisma Cloud Scan Action
-The Prisma Cloud Scan Action will scan container images for vulnerabilities and compliance issues. Receive immediate feedback about image vulnerabilities and compliance violations both in GitHub and in the Prisma Cloud Console. Block merges that do not meet your compliance requirements, such as updates with critical vulnerabilities.
+This GitHub Action will scan container images for vulnerabilities and compliance issues using Prisma Cloud by Palo Alto Networks. Receive immediate feedback about image vulnerabilities and compliance violations both in GitHub and in the Prisma Cloud Console. Block merges that do not meet your compliance requirements, such as updates with critical vulnerabilities.
 
 This action is a wrapper around [twistcli](https://docs.twistlock.com/docs/compute_edition/tools/twistcli_scan_images.html) which connects to the specified Prisma Cloud Console for vulnerability and compliance policy and metadata.
 
