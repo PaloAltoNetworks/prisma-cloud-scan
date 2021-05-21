@@ -6784,10 +6784,15 @@ module.exports = require("zlib");;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
+const fs = __nccwpck_require__(747)
 const fetch = __nccwpck_require__(534)
 const core = __nccwpck_require__(127)
 const tc = __nccwpck_require__(348)
 const { exec } = __nccwpck_require__(49)
+
+function toSentenceCase(string) {
+  return string[0].toUpperCase() + string.slice(1).toLowerCase();
+}
 
 // https://github.com/nodejs/node/issues/18288#issuecomment-475864601
 // Necessary for Console URLs that already have a path (all SaaS Consoles)
@@ -6851,7 +6856,7 @@ async function getVersion (addr, authToken) {
 
 // GitHub Action-specific wrapper around 'util/twistcli' Console API endpoint
 // Saves twistcli using GitHub Action's tool-cache library
-async function getTwistcli (addr, authToken) {
+async function getTwistcli (version, addr, authToken) {
   const twistcliEndpoint = '/api/v1/util/twistcli'
   let twistcliUrl
   try {
@@ -6859,15 +6864,7 @@ async function getTwistcli (addr, authToken) {
   } catch (err) {
     core.setFailed(`Invalid Console address: ${addr}`)
   }
-  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint)
-
-  let version
-  try {
-    version = await getVersion(addr, authToken)
-  } catch (err) {
-    core.setFailed(`Failed getting version: ${err.message}`)
-  }
-  version = version.replace(/"/g, '')  
+  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint) 
 
   let twistcli = tc.find('twistcli', version)
   if (!twistcli) {
@@ -6879,6 +6876,105 @@ async function getTwistcli (addr, authToken) {
   core.addPath(twistcli)
 }
 
+function formatSarifToolDriverRules (results) {
+  // Only 1 image can be scanned at a time
+  const result = results[0]
+  const imageName = result.name
+  const vulnerabilities = result.vulnerabilities
+  const compliances = result.compliances
+  
+  const vulns = vulnerabilities.map(vuln => {
+    return {
+      id: `${vuln.id}`,
+      shortDescription: {
+        text: `[Prisma Cloud] ${vuln.id} in ${vuln.packageName} (${vuln.severity})`
+      },
+      fullDescription: {
+        text: `${toSentenceCase(vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`
+      },
+      help: {
+        text: '',
+        markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
+        '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+        '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |'
+      }
+    }
+  })
+
+  const comps = compliances.map(comp => {
+    return {
+      id: `${comp.id}`,
+      shortDescription: {
+        text: `[Prisma Cloud] Compliance check ${comp.id} violated (${comp.severity})`
+      },
+      fullDescription: {
+        text: `${toSentenceCase(comp.severity)} severity compliance check "${comp.title}" violated`
+      },
+      help: {
+        text: '',
+        markdown: '| Compliance Check | Severity | Title |\n' +
+        '| --- | --- | --- |\n' +
+        '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |'
+      }
+    }
+  })
+
+  return [...vulns, ...comps]
+}
+
+function formatSarifResults (results) {
+  // Only 1 image can be scanned at a time
+  const result = results[0]
+  const imageName = result.name
+  const findings = [...result.vulnerabilities, ...result.compliances]
+
+  return findings.map(finding => {
+    return {
+      ruleId: `${finding.id}`,
+      level: 'warning',
+      message: {
+        text: `Description:\n${finding.description}`
+      },
+      locations: [{
+        physicalLocation: {
+          artifactLocation: {
+            uri: `${imageName}`
+          },
+          region: {
+            startLine: 1,
+            startColumn: 1,
+            endLine: 1,
+            endColumn: 1
+          }
+        }
+      }]
+    }
+  })
+}
+
+function formatSarif (twistcliVersion, resultsFile) {
+  try {
+    const scan = JSON.parse(fs.readFileSync(resultsFile, 'utf8'))
+    const sarif = {
+      $schema: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+      version: "2.1.0",
+      runs: [{
+        tool: {
+          driver: {
+            name: "Prisma Cloud (twistcli)",
+            version: `${twistcliVersion}`,
+            rules: formatSarifToolDriverRules(scan.results)
+          }
+        },
+        results: formatSarifResults(scan.results)
+      }]
+    }
+    return sarif
+  } catch (err) {
+    core.setFailed(err.message)
+  }
+}
+
 async function scan () {
   // User inputs
   const consoleUrl = core.getInput('pcc_console_url')
@@ -6886,9 +6982,20 @@ async function scan () {
   const password = core.getInput('pcc_pass')
   const imageName = core.getInput('image_name')
   const resultsFile = core.getInput('results_file')
+  const sarifFile = core.getInput('sarif_file')
+  
   try {
     const token = await getToken(consoleUrl, username, password)
-    await getTwistcli(consoleUrl, token)
+
+    let twistcliVersion
+    try {
+      twistcliVersion = await getVersion(consoleUrl, token)
+    } catch (err) {
+      core.setFailed(`Failed getting version: ${err.message}`)
+    }
+    twistcliVersion = twistcliVersion.replace(/"/g, '') 
+
+    await getTwistcli(twistcliVersion, consoleUrl, token)
     const twistcliCmd = [
       'twistcli', 'images', 'scan',
       `--address ${consoleUrl}`,
@@ -6903,7 +7010,11 @@ async function scan () {
     if (exitCode > 0) {
       core.setFailed('twistcli scan failed')
     }
+
+    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)))
+
     core.setOutput('results_file', resultsFile)
+    core.setOutput('sarif_file', sarifFile)
   } catch (err) {
     core.setFailed(`Image scan failed: ${err.message}`)
   }

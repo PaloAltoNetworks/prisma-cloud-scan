@@ -20,9 +20,15 @@ inputs:
     description: File to which scan results are written
     required: false
     default: pcc_scan_results.json
+  sarif_file:
+    description: File to which scan results are written in SARIF
+    required: false
+    default: pcc_scan_results.sarif.json
 outputs:
   results_file:
     description: File containing scan results
+  sarif_file:
+    description: File containing scan results in SARIF
 runs:
   using: node12
   main: dist/index.js
