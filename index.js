@@ -93,45 +93,50 @@ async function getTwistcli (version, addr, authToken) {
 function formatSarifToolDriverRules (results) {
   // Only 1 image can be scanned at a time
   const result = results[0]
-  const imageName = result.name
   const vulnerabilities = result.vulnerabilities
   const compliances = result.compliances
-  
-  const vulns = vulnerabilities.map(vuln => {
-    return {
-      id: `${vuln.id}`,
-      shortDescription: {
-        text: `[Prisma Cloud] ${vuln.id} in ${vuln.packageName} (${vuln.severity})`
-      },
-      fullDescription: {
-        text: `${toSentenceCase(vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`
-      },
-      help: {
-        text: '',
-        markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-        '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-        '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |'
-      }
-    }
-  })
 
-  const comps = compliances.map(comp => {
-    return {
-      id: `${comp.id}`,
-      shortDescription: {
-        text: `[Prisma Cloud] Compliance check ${comp.id} violated (${comp.severity})`
-      },
-      fullDescription: {
-        text: `${toSentenceCase(comp.severity)} severity compliance check "${comp.title}" violated`
-      },
-      help: {
-        text: '',
-        markdown: '| Compliance Check | Severity | Title |\n' +
-        '| --- | --- | --- |\n' +
-        '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |'
+  let vulns = []
+  if (vulnerabilities) {
+    vulns = vulnerabilities.map(vuln => {
+      return {
+        id: `${vuln.id}`,
+        shortDescription: {
+          text: `[Prisma Cloud] ${vuln.id} in ${vuln.packageName} (${vuln.severity})`
+        },
+        fullDescription: {
+          text: `${toSentenceCase(vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`
+        },
+        help: {
+          text: '',
+          markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
+          '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+          '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |'
+        }
       }
-    }
-  })
+    })
+  }
+
+  let comps = []
+  if (compliances) {
+    comps = compliances.map(comp => {
+      return {
+        id: `${comp.id}`,
+        shortDescription: {
+          text: `[Prisma Cloud] Compliance check ${comp.id} violated (${comp.severity})`
+        },
+        fullDescription: {
+          text: `${toSentenceCase(comp.severity)} severity compliance check "${comp.title}" violated`
+        },
+        help: {
+          text: '',
+          markdown: '| Compliance Check | Severity | Title |\n' +
+          '| --- | --- | --- |\n' +
+          '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |'
+        }
+      }
+    })
+  }
 
   return [...vulns, ...comps]
 }
@@ -140,30 +145,39 @@ function formatSarifResults (results) {
   // Only 1 image can be scanned at a time
   const result = results[0]
   const imageName = result.name
-  const findings = [...result.vulnerabilities, ...result.compliances]
+  let findings = []
+  if (result.vulnerabilities) {
+    findings = [...findings, ...result.vulnerabilities]
+  }
+  if (result.compliances) {
+    findings = [...findings, ...result.compliances]
+  }
 
-  return findings.map(finding => {
-    return {
-      ruleId: `${finding.id}`,
-      level: 'warning',
-      message: {
-        text: `Description:\n${finding.description}`
-      },
-      locations: [{
-        physicalLocation: {
-          artifactLocation: {
-            uri: `${imageName}`
-          },
-          region: {
-            startLine: 1,
-            startColumn: 1,
-            endLine: 1,
-            endColumn: 1
+  if (findings) {
+    return findings.map(finding => {
+      return {
+        ruleId: `${finding.id}`,
+        level: 'warning',
+        message: {
+          text: `Description:\n${finding.description}`
+        },
+        locations: [{
+          physicalLocation: {
+            artifactLocation: {
+              uri: `${imageName}`
+            },
+            region: {
+              startLine: 1,
+              startColumn: 1,
+              endLine: 1,
+              endColumn: 1
+            }
           }
-        }
-      }]
-    }
-  })
+        }]
+      }
+    })
+  }
+  return []
 }
 
 function formatSarif (twistcliVersion, resultsFile) {
