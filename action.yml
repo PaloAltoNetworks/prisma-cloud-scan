@@ -19,6 +19,9 @@ inputs:
   image_name:
     description: Name (or ID) of the image to be scanned
     required: true
+  containerized:
+    description: Run the scan from inside a running container (must be 'true', 'yes', 'y', or '1')
+    required: false
   results_file:
     description: File to which scan results are written
     required: false

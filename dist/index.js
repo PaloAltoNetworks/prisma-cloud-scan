@@ -6790,6 +6790,8 @@ const core = __nccwpck_require__(127)
 const tc = __nccwpck_require__(348)
 const { exec } = __nccwpck_require__(49)
 
+const TRUE_VALUES = ['true', 'yes', 'y', '1']
+
 function toSentenceCase(string) {
   return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
@@ -6996,6 +6998,7 @@ async function scan () {
   const username = core.getInput('pcc_user')
   const password = core.getInput('pcc_pass')
   const imageName = core.getInput('image_name')
+  const containerized = core.getInput('containerized').toLowerCase()
   const resultsFile = core.getInput('results_file')
   const sarifFile = core.getInput('sarif_file')
   
@@ -7020,8 +7023,12 @@ async function scan () {
       `--address ${consoleUrl}`,
       `--user ${username}`, `--password ${password}`,
       `--output-file ${resultsFile}`,
-      '--details', imageName,
+      '--details',
     ])
+    if (TRUE_VALUES.includes(containerized)) {
+      twistcliCmd = twistcliCmd.concat(['--containerized'])
+    }
+    twistcliCmd = twistcliCmd.concat([imageName])
 
     const exitCode = await exec(twistcliCmd.join(' '), undefined, {
       ignoreReturnCode: true
