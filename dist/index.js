@@ -7011,14 +7011,17 @@ async function scan () {
     twistcliVersion = twistcliVersion.replace(/"/g, '') 
 
     await getTwistcli(twistcliVersion, consoleUrl, token)
-    const twistcliCmd = [
-      'twistcli', `--http-proxy ${httpProxy}`,
+    let twistcliCmd = ['twistcli']
+    if (httpProxy) {
+      twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`])
+    }
+    twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
       `--address ${consoleUrl}`,
       `--user ${username}`, `--password ${password}`,
       `--output-file ${resultsFile}`,
       '--details', imageName,
-    ]
+    ])
 
     const exitCode = await exec(twistcliCmd.join(' '), undefined, {
       ignoreReturnCode: true

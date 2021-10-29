@@ -7,7 +7,6 @@ inputs:
   http_proxy:
     description: URL of an HTTP proxy needed to reach your Prisma Cloud Compute Console
     required: false
-    default: '""'
   pcc_console_url:
     description: URL of your Prisma Cloud Compute Console
     required: true
