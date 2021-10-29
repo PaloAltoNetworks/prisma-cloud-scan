@@ -29,12 +29,12 @@ async function getToken (addr, user, pass) {
     const authResponse = await fetch(authUrl.toString(), {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: user,
-        password: pass
-      })
+        password: pass,
+      }),
     })
     const responseJson = await authResponse.json()
 
@@ -57,8 +57,8 @@ async function getVersion (addr, authToken) {
   try {
     const versionResponse = await fetch(versionUrl.toString(), {
       headers: {
-        Authorization: `Bearer ${authToken}`
-      }
+        Authorization: `Bearer ${authToken}`,
+      },
     })
     const responseText = await versionResponse.text()
 
@@ -102,17 +102,17 @@ function formatSarifToolDriverRules (results) {
       return {
         id: `${vuln.id}`,
         shortDescription: {
-          text: `[Prisma Cloud] ${vuln.id} in ${vuln.packageName} (${vuln.severity})`
+          text: `[Prisma Cloud] ${vuln.id} in ${vuln.packageName} (${vuln.severity})`,
         },
         fullDescription: {
-          text: `${toSentenceCase(vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`
+          text: `${toSentenceCase(vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`,
         },
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
           '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-          '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |'
-        }
+          '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+        },
       }
     })
   }
@@ -123,17 +123,17 @@ function formatSarifToolDriverRules (results) {
       return {
         id: `${comp.id}`,
         shortDescription: {
-          text: `[Prisma Cloud] Compliance check ${comp.id} violated (${comp.severity})`
+          text: `[Prisma Cloud] Compliance check ${comp.id} violated (${comp.severity})`,
         },
         fullDescription: {
-          text: `${toSentenceCase(comp.severity)} severity compliance check "${comp.title}" violated`
+          text: `${toSentenceCase(comp.severity)} severity compliance check "${comp.title}" violated`,
         },
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
           '| --- | --- | --- |\n' +
-          '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |'
-        }
+          '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+        },
       }
     })
   }
@@ -159,21 +159,21 @@ function formatSarifResults (results) {
         ruleId: `${finding.id}`,
         level: 'warning',
         message: {
-          text: `Description:\n${finding.description}`
+          text: `Description:\n${finding.description}`,
         },
         locations: [{
           physicalLocation: {
             artifactLocation: {
-              uri: `${imageName}`
+              uri: `${imageName}`,
             },
             region: {
               startLine: 1,
               startColumn: 1,
               endLine: 1,
-              endColumn: 1
-            }
-          }
-        }]
+              endColumn: 1,
+            },
+          },
+        }],
       }
     })
   }
@@ -191,11 +191,11 @@ function formatSarif (twistcliVersion, resultsFile) {
           driver: {
             name: "Prisma Cloud (twistcli)",
             version: `${twistcliVersion}`,
-            rules: formatSarifToolDriverRules(scan.results)
+            rules: formatSarifToolDriverRules(scan.results),
           }
         },
-        results: formatSarifResults(scan.results)
-      }]
+        results: formatSarifResults(scan.results),
+      }],
     }
     return sarif
   } catch (err) {
@@ -205,6 +205,7 @@ function formatSarif (twistcliVersion, resultsFile) {
 
 async function scan () {
   // User inputs
+  const httpProxy = core.getInput('http_proxy')
   const consoleUrl = core.getInput('pcc_console_url')
   const username = core.getInput('pcc_user')
   const password = core.getInput('pcc_pass')
@@ -225,18 +226,19 @@ async function scan () {
 
     await getTwistcli(twistcliVersion, consoleUrl, token)
     const twistcliCmd = [
-      'twistcli', 'images', 'scan',
+      'twistcli', `--http-proxy ${httpProxy}`,
+      'images', 'scan',
       `--address ${consoleUrl}`,
       `--user ${username}`, `--password ${password}`,
       `--output-file ${resultsFile}`,
-      '--details', imageName
+      '--details', imageName,
     ]
 
     const exitCode = await exec(twistcliCmd.join(' '), undefined, {
       ignoreReturnCode: true
     })
     if (exitCode > 0) {
-      core.setFailed('twistcli scan failed')
+      core.setFailed('Image scan failed')
     }
 
     fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)))

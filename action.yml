@@ -4,6 +4,10 @@ branding:
   color: orange
   icon: search
 inputs:
+  http_proxy:
+    description: URL of your HTTP proxy if necessary for Internet access
+    required: false
+    default: ''
   pcc_console_url:
     description: URL of your Prisma Cloud Compute Console
     required: true
