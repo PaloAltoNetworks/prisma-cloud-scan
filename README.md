@@ -75,3 +75,6 @@ The table of discovered vulnerabilities and compliance violations shows up in th
 
 ### GitHub code scanning alerts
 <img src="./images/pc_github_code_scanning.png">
+
+## Support
+Please read [SUPPORT.md](SUPPORT.md) for details on how to get support for this project.
