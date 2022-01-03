@@ -1,9 +1,6 @@
 # .gitignore template from GitHub
 # most of this is unnecessary
 
-.github/workflows/testing.yml
-Dockerfile
-
 # Logs
 logs
 *.log

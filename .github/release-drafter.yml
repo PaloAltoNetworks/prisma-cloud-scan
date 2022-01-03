@@ -1,0 +1,28 @@
+autolabeler:
+  - label: 'feature'
+    branch:
+      - '/feature\/.+/'
+  - label: 'bugfix'
+    branch:
+      - '/fix\/.+/'
+
+categories:
+  - title: 'Features'
+    labels:
+      - 'enhancement'
+      - 'feature'
+  - title: 'Bug Fixes'
+    labels:
+      - 'bug'
+      - 'bugfix'
+      - 'fix'
+
+exclude-labels:
+  - 'skip-changelog'
+
+template: |
+  ## Changes
+  $CHANGES
+
+  ## Contributors
+  $CONTRIBUTORS
