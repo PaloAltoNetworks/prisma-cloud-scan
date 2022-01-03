@@ -1,39 +1,15 @@
 {
   "name": "prisma-cloud-scan",
-  "version": "1.0.0",
-  "description": "Scan with Prisma Cloud",
   "author": "Palo Alto Networks",
-  "license": "Apache-2.0",
-  "main": "index.js",
   "scripts": {
     "lint": "eslint index.js",
     "build": "ncc build index.js --license licenses.txt"
   },
-  "homepage": "https://github.com/paloaltonetworks/prisma-cloud-scan#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/paloaltonetworks/prisma-cloud-scan.git"
-  },
-  "bugs": {
-    "url": "https://github.com/paloaltonetworks/prisma-cloud-scan/issues"
-  },
-  "keywords": [
-    "prisma",
-    "cloud",
-    "compute",
-    "twistlock",
-    "docker",
-    "container",
-    "image",
-    "vulnerability",
-    "compliance",
-    "scan"
-  ],
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/tool-cache": "^1.6.1",
-    "node-fetch": "^2.6.1"
+    "axios": "^0.24.0"
   },
   "devDependencies": {
     "eslint": "^7.23.0"
