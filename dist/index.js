@@ -14,7 +14,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__nccwpck_require__(87));
+const os = __importStar(__nccwpck_require__(37));
 const utils_1 = __nccwpck_require__(245);
 /**
  * Commands
@@ -112,8 +112,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const command_1 = __nccwpck_require__(604);
 const file_command_1 = __nccwpck_require__(352);
 const utils_1 = __nccwpck_require__(245);
-const os = __importStar(__nccwpck_require__(87));
-const path = __importStar(__nccwpck_require__(622));
+const os = __importStar(__nccwpck_require__(37));
+const path = __importStar(__nccwpck_require__(17));
 /**
  * The code to exit an action
  */
@@ -348,8 +348,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__nccwpck_require__(747));
-const os = __importStar(__nccwpck_require__(87));
+const fs = __importStar(__nccwpck_require__(147));
+const os = __importStar(__nccwpck_require__(37));
 const utils_1 = __nccwpck_require__(245);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
@@ -467,10 +467,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__nccwpck_require__(87));
-const events = __importStar(__nccwpck_require__(614));
-const child = __importStar(__nccwpck_require__(129));
-const path = __importStar(__nccwpck_require__(622));
+const os = __importStar(__nccwpck_require__(37));
+const events = __importStar(__nccwpck_require__(361));
+const child = __importStar(__nccwpck_require__(81));
+const path = __importStar(__nccwpck_require__(17));
 const io = __importStar(__nccwpck_require__(864));
 const ioUtil = __importStar(__nccwpck_require__(887));
 /* eslint-disable @typescript-eslint/unbound-method */
@@ -1058,8 +1058,8 @@ class ExecState extends events.EventEmitter {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const http = __nccwpck_require__(605);
-const https = __nccwpck_require__(211);
+const http = __nccwpck_require__(685);
+const https = __nccwpck_require__(687);
 const pm = __nccwpck_require__(45);
 let tunnel;
 var HttpCodes;
@@ -1685,9 +1685,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const assert_1 = __nccwpck_require__(357);
-const fs = __importStar(__nccwpck_require__(747));
-const path = __importStar(__nccwpck_require__(622));
+const assert_1 = __nccwpck_require__(491);
+const fs = __importStar(__nccwpck_require__(147));
+const path = __importStar(__nccwpck_require__(17));
 _a = fs.promises, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 exports.IS_WINDOWS = process.platform === 'win32';
 function exists(fsPath) {
@@ -1893,9 +1893,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const childProcess = __importStar(__nccwpck_require__(129));
-const path = __importStar(__nccwpck_require__(622));
-const util_1 = __nccwpck_require__(669);
+const childProcess = __importStar(__nccwpck_require__(81));
+const path = __importStar(__nccwpck_require__(17));
+const util_1 = __nccwpck_require__(837);
 const ioUtil = __importStar(__nccwpck_require__(887));
 const exec = util_1.promisify(childProcess.exec);
 /**
@@ -2216,9 +2216,9 @@ const semver = __importStar(__nccwpck_require__(156));
 const core_1 = __nccwpck_require__(127);
 // needs to be require for core node modules to be mocked
 /* eslint @typescript-eslint/no-require-imports: 0 */
-const os = __nccwpck_require__(87);
-const cp = __nccwpck_require__(129);
-const fs = __nccwpck_require__(747);
+const os = __nccwpck_require__(37);
+const cp = __nccwpck_require__(81);
+const fs = __nccwpck_require__(147);
 function _findMatch(versionSpec, stable, candidates, archFilter) {
     return __awaiter(this, void 0, void 0, function* () {
         const platFilter = os.platform();
@@ -2407,17 +2407,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(127));
 const io = __importStar(__nccwpck_require__(864));
-const fs = __importStar(__nccwpck_require__(747));
+const fs = __importStar(__nccwpck_require__(147));
 const mm = __importStar(__nccwpck_require__(24));
-const os = __importStar(__nccwpck_require__(87));
-const path = __importStar(__nccwpck_require__(622));
+const os = __importStar(__nccwpck_require__(37));
+const path = __importStar(__nccwpck_require__(17));
 const httpm = __importStar(__nccwpck_require__(840));
 const semver = __importStar(__nccwpck_require__(156));
-const stream = __importStar(__nccwpck_require__(413));
-const util = __importStar(__nccwpck_require__(669));
+const stream = __importStar(__nccwpck_require__(781));
+const util = __importStar(__nccwpck_require__(837));
 const v4_1 = __importDefault(__nccwpck_require__(350));
 const exec_1 = __nccwpck_require__(49);
-const assert_1 = __nccwpck_require__(357);
+const assert_1 = __nccwpck_require__(491);
 const retry_helper_1 = __nccwpck_require__(429);
 class HTTPError extends Error {
     constructor(httpStatusCode) {
@@ -3003,11 +3003,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var Stream = _interopDefault(__nccwpck_require__(413));
-var http = _interopDefault(__nccwpck_require__(605));
-var Url = _interopDefault(__nccwpck_require__(835));
-var https = _interopDefault(__nccwpck_require__(211));
-var zlib = _interopDefault(__nccwpck_require__(761));
+var Stream = _interopDefault(__nccwpck_require__(781));
+var http = _interopDefault(__nccwpck_require__(685));
+var Url = _interopDefault(__nccwpck_require__(310));
+var https = _interopDefault(__nccwpck_require__(687));
+var zlib = _interopDefault(__nccwpck_require__(796));
 
 // Based on https://github.com/tmpvar/jsdom/blob/aa85b2abf07766ff7bf5c1f6daafb3726f2f2db5/lib/jsdom/living/blob.js
 
@@ -3158,7 +3158,7 @@ FetchError.prototype.name = 'FetchError';
 
 let convert;
 try {
-	convert = __nccwpck_require__(431).convert;
+	convert = (__nccwpck_require__(431).convert);
 } catch (e) {}
 
 const INTERNALS = Symbol('Body internals');
@@ -4641,7 +4641,7 @@ fetch.Promise = global.Promise;
 
 module.exports = exports = fetch;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.default = exports;
+exports["default"] = exports;
 exports.Headers = Headers;
 exports.Request = Request;
 exports.Response = Response;
@@ -6267,13 +6267,13 @@ module.exports = __nccwpck_require__(686);
 "use strict";
 
 
-var net = __nccwpck_require__(631);
-var tls = __nccwpck_require__(16);
-var http = __nccwpck_require__(605);
-var https = __nccwpck_require__(211);
-var events = __nccwpck_require__(614);
-var assert = __nccwpck_require__(357);
-var util = __nccwpck_require__(669);
+var net = __nccwpck_require__(808);
+var tls = __nccwpck_require__(404);
+var http = __nccwpck_require__(685);
+var https = __nccwpck_require__(687);
+var events = __nccwpck_require__(361);
+var assert = __nccwpck_require__(491);
+var util = __nccwpck_require__(837);
 
 
 exports.httpOverHttp = httpOverHttp;
@@ -6572,7 +6572,7 @@ module.exports = bytesToUuid;
 // Unique ID creation requires a high quality random # generator.  In node.js
 // this is pretty straight-forward - we use the crypto API.
 
-var crypto = __nccwpck_require__(417);
+var crypto = __nccwpck_require__(113);
 
 module.exports = function nodeRNG() {
   return crypto.randomBytes(16);
@@ -6625,123 +6625,123 @@ module.exports = eval("require")("encoding");
 
 /***/ }),
 
-/***/ 357:
+/***/ 491:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");;
+module.exports = require("assert");
 
 /***/ }),
 
-/***/ 129:
+/***/ 81:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");;
+module.exports = require("child_process");
 
 /***/ }),
 
-/***/ 417:
+/***/ 113:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("crypto");;
+module.exports = require("crypto");
 
 /***/ }),
 
-/***/ 614:
+/***/ 361:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");;
+module.exports = require("events");
 
 /***/ }),
 
-/***/ 747:
+/***/ 147:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
 
 /***/ }),
 
-/***/ 605:
+/***/ 685:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");;
+module.exports = require("http");
 
 /***/ }),
 
-/***/ 211:
+/***/ 687:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");;
+module.exports = require("https");
 
 /***/ }),
 
-/***/ 631:
+/***/ 808:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");;
+module.exports = require("net");
 
 /***/ }),
 
-/***/ 87:
+/***/ 37:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
-/***/ 622:
+/***/ 17:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
 
 /***/ }),
 
-/***/ 413:
+/***/ 781:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");;
+module.exports = require("stream");
 
 /***/ }),
 
-/***/ 16:
+/***/ 404:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");;
+module.exports = require("tls");
 
 /***/ }),
 
-/***/ 835:
+/***/ 310:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");;
+module.exports = require("url");
 
 /***/ }),
 
-/***/ 669:
+/***/ 837:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ }),
 
-/***/ 761:
+/***/ 796:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("zlib");;
+module.exports = require("zlib");
 
 /***/ })
 
@@ -6780,11 +6780,13 @@ module.exports = require("zlib");;
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const fs = __nccwpck_require__(747)
+const fs = __nccwpck_require__(147)
 const fetch = __nccwpck_require__(534)
 const core = __nccwpck_require__(127)
 const tc = __nccwpck_require__(348)
@@ -6835,7 +6837,7 @@ async function getToken (addr, user, pass) {
 // Wrapper around 'version' Console API endpoint
 async function getVersion (addr, authToken) {
   const versionEndpoint = '/api/v1/version'
-  let versionUrl 
+  let versionUrl
   try {
     versionUrl = new URL(addr)
   } catch (err) {
@@ -6866,7 +6868,7 @@ async function getTwistcli (version, addr, authToken) {
   } catch (err) {
     core.setFailed(`Invalid Console address: ${addr}`)
   }
-  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint) 
+  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint)
 
   let twistcli = tc.find('twistcli', version)
   if (!twistcli) {
@@ -6898,8 +6900,8 @@ function formatSarifToolDriverRules (results) {
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-          '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-          '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+              '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
       }
     })
@@ -6919,8 +6921,8 @@ function formatSarifToolDriverRules (results) {
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-          '| --- | --- | --- |\n' +
-          '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+              '| --- | --- | --- |\n' +
+              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
       }
     })
@@ -7001,7 +7003,9 @@ async function scan () {
   const containerized = core.getInput('containerized').toLowerCase()
   const resultsFile = core.getInput('results_file')
   const sarifFile = core.getInput('sarif_file')
-  
+  const dockerHost = core.getInput('docker_host') ? core.getInput('docker_host')
+      : process.env.DOCKER_HOST
+
   try {
     const token = await getToken(consoleUrl, username, password)
 
@@ -7011,7 +7015,7 @@ async function scan () {
     } catch (err) {
       core.setFailed(`Failed getting version: ${err.message}`)
     }
-    twistcliVersion = twistcliVersion.replace(/"/g, '') 
+    twistcliVersion = twistcliVersion.replace(/"/g, '')
 
     await getTwistcli(twistcliVersion, consoleUrl, token)
     let twistcliCmd = ['twistcli']
@@ -7025,6 +7029,9 @@ async function scan () {
       `--output-file ${resultsFile}`,
       '--details',
     ])
+    if (dockerHost) {
+      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`])
+    }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized'])
     }

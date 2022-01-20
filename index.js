@@ -49,7 +49,7 @@ async function getToken (addr, user, pass) {
 // Wrapper around 'version' Console API endpoint
 async function getVersion (addr, authToken) {
   const versionEndpoint = '/api/v1/version'
-  let versionUrl 
+  let versionUrl
   try {
     versionUrl = new URL(addr)
   } catch (err) {
@@ -80,7 +80,7 @@ async function getTwistcli (version, addr, authToken) {
   } catch (err) {
     core.setFailed(`Invalid Console address: ${addr}`)
   }
-  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint) 
+  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint)
 
   let twistcli = tc.find('twistcli', version)
   if (!twistcli) {
@@ -112,8 +112,8 @@ function formatSarifToolDriverRules (results) {
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-          '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-          '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+              '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
       }
     })
@@ -133,8 +133,8 @@ function formatSarifToolDriverRules (results) {
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-          '| --- | --- | --- |\n' +
-          '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+              '| --- | --- | --- |\n' +
+              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
       }
     })
@@ -215,7 +215,9 @@ async function scan () {
   const containerized = core.getInput('containerized').toLowerCase()
   const resultsFile = core.getInput('results_file')
   const sarifFile = core.getInput('sarif_file')
-  
+  const dockerHost = core.getInput('docker_host') ? core.getInput('docker_host')
+      : process.env.DOCKER_HOST
+
   try {
     const token = await getToken(consoleUrl, username, password)
 
@@ -225,7 +227,7 @@ async function scan () {
     } catch (err) {
       core.setFailed(`Failed getting version: ${err.message}`)
     }
-    twistcliVersion = twistcliVersion.replace(/"/g, '') 
+    twistcliVersion = twistcliVersion.replace(/"/g, '')
 
     await getTwistcli(twistcliVersion, consoleUrl, token)
     let twistcliCmd = ['twistcli']
@@ -239,6 +241,9 @@ async function scan () {
       `--output-file ${resultsFile}`,
       '--details',
     ])
+    if (dockerHost) {
+      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`])
+    }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized'])
     }
