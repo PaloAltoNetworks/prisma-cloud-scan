@@ -213,19 +213,19 @@ function formatSarif(twistcliVersion, resultsFile) {
 }
 
 async function scan() {
+  const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
   const consoleUrl = core.getInput('pcc_console_url');
   const username = core.getInput('pcc_user');
   const password = core.getInput('pcc_pass');
   const imageName = core.getInput('image_name');
   const containerized = core.getInput('containerized').toLowerCase();
+  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS;
+  const dockerTlsCaCert = core.getInput('docker_tlscacert');
+  const dockerTlsCert = core.getInput('docker_tlscert');
+  const dockerTlsKey = core.getInput('docker_tlskey');
+
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
-  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS;
-  const dockerTlscacert = core.getInput('docker_tlscacert')
-  const dockerTlscert = core.getInput('docker_tlscert')
-  const dockerTlskey = core.getInput('docker_tlskey')
-
-  const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
 
   try {
     let token;
@@ -260,14 +260,14 @@ async function scan() {
     if (dockerAddress) {
       twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`]);
     }
-    if (dockerTlscacert != "") {
-      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlscacert}`]);
+    if (dockerTlsCaCert) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlsCaCert}`]);
     }
-    if (dockerTlscert != "") {
-      twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlscert}`]);
+    if (dockerTlsCert) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlsCert}`]);
     }
-    if (dockerTlskey != "") {
-      twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlskey}`]);
+    if (dockerTlsKey) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlsKey}`]);
     }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);

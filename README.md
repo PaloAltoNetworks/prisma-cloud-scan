@@ -45,7 +45,7 @@ jobs:
 ### Environment variables
 | Variable | Description | Required? | Default |
 |---|---|---|---|
-| `DOCKER_ADDRESS` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No | |
+| `DOCKER_ADDRESS` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
 
 ### Inputs
 | Input | Description | Required? | Default |
@@ -57,9 +57,9 @@ jobs:
 | `results_file` | File to which scan results are written in JSON | No | `pcc_scan_results.json` |
 | `sarif_file` | File to which scan results are written in SARIF | No | `pcc_scan_results.sarif.json` |
 | `docker_address` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
-| `docker_tlscacert` | Path to Docker client CA certificate | No |  |
-| `docker_tlscert` | Path to Docker client Client certificate | No |  |
-| `docker_tlskey` | Path to Docker client Client private key | No |  |
+| `docker_tlscacert` | Path to the Docker CA certificate | No |  |
+| `docker_tlscert` | Path to the Docker client certificate | No |  |
+| `docker_tlskey` | Path to the Docker client private key | No |  |
 
 ### Outputs
 | Output | Description |
