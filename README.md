@@ -45,7 +45,7 @@ jobs:
 ### Environment variables
 | Variable | Description | Required? | Default |
 |---|---|---|---|
-| `DOCKER_ADDRESS` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No | |
+| `DOCKER_HOST` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No | |
 
 ### Inputs
 | Input | Description | Required? | Default |
