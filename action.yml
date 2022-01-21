@@ -30,6 +30,9 @@ inputs:
     description: File to which scan results are written in SARIF
     required: false
     default: pcc_scan_results.sarif.json
+  docker_address:
+    description: Address of the Docker daemon
+    required: false
 outputs:
   results_file:
     description: File containing scan results

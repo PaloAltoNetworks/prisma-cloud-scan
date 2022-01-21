@@ -42,16 +42,22 @@ jobs:
 
 
 ## Properties
+### Environment variables
+| Variable | Description | Required? | Default |
+|---|---|---|---|
+| `DOCKER_ADDRESS` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No | |
+
 ### Inputs
 | Input | Description | Required? | Default |
 |---|---|---|---|
-| `http_proxy` | URL of your HTTP proxy if necessary for Internet access | No | `''` | 
+| `http_proxy` | URL of your HTTP proxy if necessary for Internet access | No |  | 
 | `pcc_console_url` | URL of your Prisma Cloud Compute Console | Yes |  |
 | `pcc_user` | Username of a user with the CI user role | Yes |  |
 | `pcc_pass` | Password of a user with the CI user role | Yes |  |
 | `image_name` | Name (or ID) of the image to be scanned | Yes |  |
 | `results_file` | File to which scan results are written in JSON | No | `pcc_scan_results.json` |
 | `sarif_file` | File to which scan results are written in SARIF | No | `pcc_scan_results.sarif.json` |
+| `docker_address` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
 
 ### Outputs
 | Output | Description |
