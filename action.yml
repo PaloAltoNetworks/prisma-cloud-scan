@@ -30,6 +30,15 @@ inputs:
   docker_address:
     description: Address of the Docker daemon
     required: false
+  docker_tlscacert:
+    description: Path to Docker client CA certificate
+    required: false
+  docker_tlscert:
+    description: Path to Docker client Client certificate
+    required: false
+  docker_tlskey:
+    description: Path to Docker client Client private key
+    required: false
 outputs:
   results_file:
     description: File containing scan results

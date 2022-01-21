@@ -221,6 +221,10 @@ async function scan() {
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
   const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS;
+  const dockerTlscacert = core.getInput('docker_tlscacert')
+  const dockerTlscert = core.getInput('docker_tlscert')
+  const dockerTlskey = core.getInput('docker_tlskey')
+
   const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
 
   try {
@@ -255,6 +259,15 @@ async function scan() {
     ]);
     if (dockerAddress) {
       twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`]);
+    }
+    if (dockerTlscacert != "") {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlscacert}`]);
+    }
+    if (dockerTlscert != "") {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlscert}`]);
+    }
+    if (dockerTlskey != "") {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlskey}`]);
     }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
