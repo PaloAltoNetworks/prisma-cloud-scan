@@ -18,7 +18,7 @@ function joinUrlPath(...parts) {
 }
 
 // Wrapper around 'authenticate' Console API endpoint
-async function getToken (addr, user, pass) {
+async function getToken(addr, user, pass) {
   const authEndpoint = '/api/v1/authenticate'
   let authUrl
   try {
@@ -47,7 +47,7 @@ async function getToken (addr, user, pass) {
 }
 
 // Wrapper around 'version' Console API endpoint
-async function getVersion (addr, authToken) {
+async function getVersion(addr, authToken) {
   const versionEndpoint = '/api/v1/version'
   let versionUrl
   try {
@@ -72,7 +72,7 @@ async function getVersion (addr, authToken) {
 
 // GitHub Action-specific wrapper around 'util/twistcli' Console API endpoint
 // Saves twistcli using GitHub Action's tool-cache library
-async function getTwistcli (version, addr, authToken) {
+async function getTwistcli(version, addr, authToken) {
   const twistcliEndpoint = '/api/v1/util/twistcli'
   let twistcliUrl
   try {
@@ -92,7 +92,7 @@ async function getTwistcli (version, addr, authToken) {
   core.addPath(twistcli)
 }
 
-function formatSarifToolDriverRules (results) {
+function formatSarifToolDriverRules(results) {
   // Only 1 image can be scanned at a time
   const result = results[0]
   const vulnerabilities = result.vulnerabilities
@@ -112,8 +112,8 @@ function formatSarifToolDriverRules (results) {
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-              '| [' + vuln.id + ']('+ vuln.link +') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+            '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+            '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
       }
     })
@@ -133,8 +133,8 @@ function formatSarifToolDriverRules (results) {
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-              '| --- | --- | --- |\n' +
-              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+            '| --- | --- | --- |\n' +
+            '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
       }
     })
@@ -143,7 +143,7 @@ function formatSarifToolDriverRules (results) {
   return [...vulns, ...comps]
 }
 
-function formatSarifResults (results) {
+function formatSarifResults(results) {
   // Only 1 image can be scanned at a time
   const result = results[0]
   const imageName = result.name
@@ -182,7 +182,7 @@ function formatSarifResults (results) {
   return []
 }
 
-function formatSarif (twistcliVersion, resultsFile) {
+function formatSarif(twistcliVersion, resultsFile) {
   try {
     const scan = JSON.parse(fs.readFileSync(resultsFile, 'utf8'))
     const sarif = {
@@ -205,7 +205,7 @@ function formatSarif (twistcliVersion, resultsFile) {
   }
 }
 
-async function scan () {
+async function scan() {
   // User inputs
   const httpProxy = core.getInput('http_proxy')
   const consoleUrl = core.getInput('pcc_console_url')
@@ -215,8 +215,7 @@ async function scan () {
   const containerized = core.getInput('containerized').toLowerCase()
   const resultsFile = core.getInput('results_file')
   const sarifFile = core.getInput('sarif_file')
-  const dockerHost = core.getInput('docker_host') ? core.getInput('docker_host')
-      : process.env.DOCKER_HOST
+  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS
 
   try {
     const token = await getToken(consoleUrl, username, password)
@@ -241,8 +240,8 @@ async function scan () {
       `--output-file ${resultsFile}`,
       '--details',
     ])
-    if (dockerHost) {
-      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`])
+    if (dockerAddress) {
+      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`])
     }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized'])
