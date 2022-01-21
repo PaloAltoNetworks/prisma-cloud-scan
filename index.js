@@ -215,7 +215,7 @@ async function scan() {
   const containerized = core.getInput('containerized').toLowerCase()
   const resultsFile = core.getInput('results_file')
   const sarifFile = core.getInput('sarif_file')
-  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS
+  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_HOST
 
   try {
     const token = await getToken(consoleUrl, username, password)
