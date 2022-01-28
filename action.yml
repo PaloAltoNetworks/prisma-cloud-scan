@@ -4,9 +4,6 @@ branding:
   color: orange
   icon: search
 inputs:
-  http_proxy:
-    description: URL of an HTTP proxy needed to reach your Prisma Cloud Compute Console
-    required: false
   pcc_console_url:
     description: URL of your Prisma Cloud Compute Console
     required: true
@@ -30,8 +27,17 @@ inputs:
     description: File to which scan results are written in SARIF
     required: false
     default: pcc_scan_results.sarif.json
-  docker_address:
+  docker_host:
     description: Address of the Docker daemon
+    required: false
+  docker_tlscacert:
+    description: Path to the Docker CA certificate
+    required: false
+  docker_tlscert:
+    description: Path to the Docker client certificate
+    required: false
+  docker_tlskey:
+    description: Path to the Docker client private key
     required: false
 outputs:
   results_file:

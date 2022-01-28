@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 604:
+/***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -14,8 +14,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__nccwpck_require__(87));
-const utils_1 = __nccwpck_require__(245);
+const os = __importStar(__nccwpck_require__(37));
+const utils_1 = __nccwpck_require__(278);
 /**
  * Commands
  *
@@ -87,7 +87,7 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 127:
+/***/ 186:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -109,11 +109,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __nccwpck_require__(604);
-const file_command_1 = __nccwpck_require__(352);
-const utils_1 = __nccwpck_require__(245);
-const os = __importStar(__nccwpck_require__(87));
-const path = __importStar(__nccwpck_require__(622));
+const command_1 = __nccwpck_require__(351);
+const file_command_1 = __nccwpck_require__(717);
+const utils_1 = __nccwpck_require__(278);
+const os = __importStar(__nccwpck_require__(37));
+const path = __importStar(__nccwpck_require__(17));
 /**
  * The code to exit an action
  */
@@ -332,7 +332,7 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 352:
+/***/ 717:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -348,9 +348,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__nccwpck_require__(747));
-const os = __importStar(__nccwpck_require__(87));
-const utils_1 = __nccwpck_require__(245);
+const fs = __importStar(__nccwpck_require__(147));
+const os = __importStar(__nccwpck_require__(37));
+const utils_1 = __nccwpck_require__(278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -368,7 +368,7 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
-/***/ 245:
+/***/ 278:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -394,7 +394,7 @@ exports.toCommandValue = toCommandValue;
 
 /***/ }),
 
-/***/ 49:
+/***/ 514:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -416,7 +416,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tr = __importStar(__nccwpck_require__(469));
+const tr = __importStar(__nccwpck_require__(159));
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -445,7 +445,7 @@ exports.exec = exec;
 
 /***/ }),
 
-/***/ 469:
+/***/ 159:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -467,12 +467,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__nccwpck_require__(87));
-const events = __importStar(__nccwpck_require__(614));
-const child = __importStar(__nccwpck_require__(129));
-const path = __importStar(__nccwpck_require__(622));
-const io = __importStar(__nccwpck_require__(864));
-const ioUtil = __importStar(__nccwpck_require__(887));
+const os = __importStar(__nccwpck_require__(37));
+const events = __importStar(__nccwpck_require__(361));
+const child = __importStar(__nccwpck_require__(81));
+const path = __importStar(__nccwpck_require__(17));
+const io = __importStar(__nccwpck_require__(436));
+const ioUtil = __importStar(__nccwpck_require__(962));
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
 /*
@@ -1052,15 +1052,15 @@ class ExecState extends events.EventEmitter {
 
 /***/ }),
 
-/***/ 840:
+/***/ 925:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const http = __nccwpck_require__(605);
-const https = __nccwpck_require__(211);
-const pm = __nccwpck_require__(45);
+const http = __nccwpck_require__(685);
+const https = __nccwpck_require__(687);
+const pm = __nccwpck_require__(443);
 let tunnel;
 var HttpCodes;
 (function (HttpCodes) {
@@ -1479,7 +1479,7 @@ class HttpClient {
         if (useProxy) {
             // If using proxy, need tunnel
             if (!tunnel) {
-                tunnel = __nccwpck_require__(265);
+                tunnel = __nccwpck_require__(294);
             }
             const agentOptions = {
                 maxSockets: maxSockets,
@@ -1597,7 +1597,7 @@ exports.HttpClient = HttpClient;
 
 /***/ }),
 
-/***/ 45:
+/***/ 443:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -1662,7 +1662,7 @@ exports.checkBypass = checkBypass;
 
 /***/ }),
 
-/***/ 887:
+/***/ 962:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1685,9 +1685,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const assert_1 = __nccwpck_require__(357);
-const fs = __importStar(__nccwpck_require__(747));
-const path = __importStar(__nccwpck_require__(622));
+const assert_1 = __nccwpck_require__(491);
+const fs = __importStar(__nccwpck_require__(147));
+const path = __importStar(__nccwpck_require__(17));
 _a = fs.promises, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 exports.IS_WINDOWS = process.platform === 'win32';
 function exists(fsPath) {
@@ -1871,7 +1871,7 @@ function isUnixExecutable(stats) {
 
 /***/ }),
 
-/***/ 864:
+/***/ 436:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1893,10 +1893,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const childProcess = __importStar(__nccwpck_require__(129));
-const path = __importStar(__nccwpck_require__(622));
-const util_1 = __nccwpck_require__(669);
-const ioUtil = __importStar(__nccwpck_require__(887));
+const childProcess = __importStar(__nccwpck_require__(81));
+const path = __importStar(__nccwpck_require__(17));
+const util_1 = __nccwpck_require__(837);
+const ioUtil = __importStar(__nccwpck_require__(962));
 const exec = util_1.promisify(childProcess.exec);
 /**
  * Copies a file or folder.
@@ -2190,7 +2190,7 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
-/***/ 24:
+/***/ 473:
 /***/ (function(module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -2212,13 +2212,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const semver = __importStar(__nccwpck_require__(156));
-const core_1 = __nccwpck_require__(127);
+const semver = __importStar(__nccwpck_require__(911));
+const core_1 = __nccwpck_require__(186);
 // needs to be require for core node modules to be mocked
 /* eslint @typescript-eslint/no-require-imports: 0 */
-const os = __nccwpck_require__(87);
-const cp = __nccwpck_require__(129);
-const fs = __nccwpck_require__(747);
+const os = __nccwpck_require__(37);
+const cp = __nccwpck_require__(81);
+const fs = __nccwpck_require__(147);
 function _findMatch(versionSpec, stable, candidates, archFilter) {
     return __awaiter(this, void 0, void 0, function* () {
         const platFilter = os.platform();
@@ -2303,7 +2303,7 @@ exports._readLinuxVersionFile = _readLinuxVersionFile;
 
 /***/ }),
 
-/***/ 429:
+/***/ 279:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -2325,7 +2325,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(127));
+const core = __importStar(__nccwpck_require__(186));
 /**
  * Internal class for retries
  */
@@ -2380,7 +2380,7 @@ exports.RetryHelper = RetryHelper;
 
 /***/ }),
 
-/***/ 348:
+/***/ 784:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -2405,20 +2405,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(127));
-const io = __importStar(__nccwpck_require__(864));
-const fs = __importStar(__nccwpck_require__(747));
-const mm = __importStar(__nccwpck_require__(24));
-const os = __importStar(__nccwpck_require__(87));
-const path = __importStar(__nccwpck_require__(622));
-const httpm = __importStar(__nccwpck_require__(840));
-const semver = __importStar(__nccwpck_require__(156));
-const stream = __importStar(__nccwpck_require__(413));
-const util = __importStar(__nccwpck_require__(669));
-const v4_1 = __importDefault(__nccwpck_require__(350));
-const exec_1 = __nccwpck_require__(49);
-const assert_1 = __nccwpck_require__(357);
-const retry_helper_1 = __nccwpck_require__(429);
+const core = __importStar(__nccwpck_require__(186));
+const io = __importStar(__nccwpck_require__(436));
+const fs = __importStar(__nccwpck_require__(147));
+const mm = __importStar(__nccwpck_require__(473));
+const os = __importStar(__nccwpck_require__(37));
+const path = __importStar(__nccwpck_require__(17));
+const httpm = __importStar(__nccwpck_require__(925));
+const semver = __importStar(__nccwpck_require__(911));
+const stream = __importStar(__nccwpck_require__(781));
+const util = __importStar(__nccwpck_require__(837));
+const v4_1 = __importDefault(__nccwpck_require__(824));
+const exec_1 = __nccwpck_require__(514);
+const assert_1 = __nccwpck_require__(491);
+const retry_helper_1 = __nccwpck_require__(279);
 class HTTPError extends Error {
     constructor(httpStatusCode) {
         super(`Unexpected HTTP response: ${httpStatusCode}`);
@@ -2993,7 +2993,7 @@ function _unique(values) {
 
 /***/ }),
 
-/***/ 156:
+/***/ 911:
 /***/ ((module, exports) => {
 
 exports = module.exports = SemVer
@@ -4596,27 +4596,27 @@ function coerce (version, options) {
 
 /***/ }),
 
-/***/ 265:
+/***/ 294:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __nccwpck_require__(686);
+module.exports = __nccwpck_require__(219);
 
 
 /***/ }),
 
-/***/ 686:
+/***/ 219:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-var net = __nccwpck_require__(631);
-var tls = __nccwpck_require__(16);
-var http = __nccwpck_require__(605);
-var https = __nccwpck_require__(211);
-var events = __nccwpck_require__(614);
-var assert = __nccwpck_require__(357);
-var util = __nccwpck_require__(669);
+var net = __nccwpck_require__(808);
+var tls = __nccwpck_require__(404);
+var http = __nccwpck_require__(685);
+var https = __nccwpck_require__(687);
+var events = __nccwpck_require__(361);
+var assert = __nccwpck_require__(491);
+var util = __nccwpck_require__(837);
 
 
 exports.httpOverHttp = httpOverHttp;
@@ -4876,7 +4876,7 @@ exports.debug = debug; // for test
 
 /***/ }),
 
-/***/ 223:
+/***/ 707:
 /***/ ((module) => {
 
 /**
@@ -4909,13 +4909,13 @@ module.exports = bytesToUuid;
 
 /***/ }),
 
-/***/ 228:
+/***/ 859:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // Unique ID creation requires a high quality random # generator.  In node.js
 // this is pretty straight-forward - we use the crypto API.
 
-var crypto = __nccwpck_require__(417);
+var crypto = __nccwpck_require__(113);
 
 module.exports = function nodeRNG() {
   return crypto.randomBytes(16);
@@ -4924,11 +4924,11 @@ module.exports = function nodeRNG() {
 
 /***/ }),
 
-/***/ 350:
+/***/ 824:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var rng = __nccwpck_require__(228);
-var bytesToUuid = __nccwpck_require__(223);
+var rng = __nccwpck_require__(859);
+var bytesToUuid = __nccwpck_require__(707);
 
 function v4(options, buf, offset) {
   var i = buf && offset || 0;
@@ -4960,115 +4960,115 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 585:
+/***/ 778:
 /***/ ((module) => {
 
-module.exports = eval("require")("node-fetch");
+module.exports = eval("require")("axios");
 
 
 /***/ }),
 
-/***/ 357:
+/***/ 491:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");;
+module.exports = require("assert");
 
 /***/ }),
 
-/***/ 129:
+/***/ 81:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");;
+module.exports = require("child_process");
 
 /***/ }),
 
-/***/ 417:
+/***/ 113:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("crypto");;
+module.exports = require("crypto");
 
 /***/ }),
 
-/***/ 614:
+/***/ 361:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");;
+module.exports = require("events");
 
 /***/ }),
 
-/***/ 747:
+/***/ 147:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
 
 /***/ }),
 
-/***/ 605:
+/***/ 685:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");;
+module.exports = require("http");
 
 /***/ }),
 
-/***/ 211:
+/***/ 687:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");;
+module.exports = require("https");
 
 /***/ }),
 
-/***/ 631:
+/***/ 808:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");;
+module.exports = require("net");
 
 /***/ }),
 
-/***/ 87:
+/***/ 37:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
-/***/ 622:
+/***/ 17:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
 
 /***/ }),
 
-/***/ 413:
+/***/ 781:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");;
+module.exports = require("stream");
 
 /***/ }),
 
-/***/ 16:
+/***/ 404:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");;
+module.exports = require("tls");
 
 /***/ }),
 
-/***/ 669:
+/***/ 837:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ })
 
@@ -5107,17 +5107,19 @@ module.exports = require("util");;
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";/************************************************************************/
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const fs = __nccwpck_require__(747)
-const fetch = __nccwpck_require__(585)
-const core = __nccwpck_require__(127)
-const tc = __nccwpck_require__(348)
-const { exec } = __nccwpck_require__(49)
+const fs = __nccwpck_require__(147);
+const axios = (__nccwpck_require__(778)["default"]);
+const core = __nccwpck_require__(186);
+const { exec } = __nccwpck_require__(514);
+const tc = __nccwpck_require__(784);
 
-const TRUE_VALUES = ['true', 'yes', 'y', '1']
+const TRUE_VALUES = ['true', 'yes', 'y', '1'];
 
 function toSentenceCase(string) {
   return string[0].toUpperCase() + string.slice(1).toLowerCase();
@@ -5131,87 +5133,92 @@ function joinUrlPath(...parts) {
 }
 
 // Wrapper around 'authenticate' Console API endpoint
-async function getToken(addr, user, pass) {
-  const authEndpoint = '/api/v1/authenticate'
-  let authUrl
+async function authenticate(url, user, pass) {
+  let parsedUrl;
   try {
-    authUrl = new URL(addr)
+    parsedUrl = new URL(url);
   } catch (err) {
-    core.setFailed(`Invalid Console address: ${addr}`)
+    console.log(`Invalid Console address: ${url}`);
+    process.exit(1);
   }
-  authUrl.pathname = joinUrlPath(authUrl.pathname, authEndpoint)
+  const endpoint = '/api/v1/authenticate';
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
+
   try {
-    const authResponse = await fetch(authUrl.toString(), {
-      method: 'POST',
+    const res = await axios({
+      method: 'post',
+      url: parsedUrl.toString(),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      data: {
         username: user,
         password: pass,
-      }),
-    })
-    const responseJson = await authResponse.json()
-
-    return responseJson.token
+      },
+    });
+    return res.data.token;
   } catch (err) {
-    core.setFailed(`Failed getting authentication token: ${err.message}`)
+    core.setFailed(`Failed getting authentication token: ${err.message}`);
+    process.exit(1);
   }
 }
 
 // Wrapper around 'version' Console API endpoint
-async function getVersion(addr, authToken) {
-  const versionEndpoint = '/api/v1/version'
-  let versionUrl
+async function getVersion(url, token) {
+  let parsedUrl;
   try {
-    versionUrl = new URL(addr)
+    parsedUrl = new URL(url);
   } catch (err) {
-    core.setFailed(`Invalid Console address: ${addr}`)
+    console.log(`Invalid Console address: ${url}`);
+    process.exit(1);
   }
-  versionUrl.pathname = joinUrlPath(versionUrl.pathname, versionEndpoint)
-  try {
-    const versionResponse = await fetch(versionUrl.toString(), {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    })
-    const responseText = await versionResponse.text()
+  const endpoint = '/api/v1/version';
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
 
-    return responseText
+  try {
+    const res = await axios({
+      method: 'get',
+      url: parsedUrl.toString(),
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return res.data;
   } catch (err) {
-    core.setFailed(`getVersion: ${err.message}`)
+    core.setFailed(`Failed getting version: ${err.message}`);
+    process.exit(1);
   }
 }
 
 // GitHub Action-specific wrapper around 'util/twistcli' Console API endpoint
 // Saves twistcli using GitHub Action's tool-cache library
-async function getTwistcli(version, addr, authToken) {
-  const twistcliEndpoint = '/api/v1/util/twistcli'
-  let twistcliUrl
+async function getTwistcli(version, url, authToken) {
+  let parsedUrl;
   try {
-    twistcliUrl = new URL(addr)
+    parsedUrl = new URL(url);
   } catch (err) {
-    core.setFailed(`Invalid Console address: ${addr}`)
+    console.log(`Invalid Console address: ${url}`);
+    process.exit(1);
   }
-  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint)
+  const endpoint = '/api/v1/util/twistcli';
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
 
-  let twistcli = tc.find('twistcli', version)
+  let twistcli = tc.find('twistcli', version);
   if (!twistcli) {
-    const twistcliPath = await tc.downloadTool(twistcliUrl.toString(), undefined, `Bearer ${authToken}`)
-    await exec(`chmod a+x ${twistcliPath}`)
-    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version)
+    const twistcliPath = await tc.downloadTool(parsedUrl.toString(), undefined, `Bearer ${authToken}`);
+    await exec(`chmod a+x ${twistcliPath}`);
+    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version);
   }
-
-  core.addPath(twistcli)
+  core.addPath(twistcli);
 }
 
 function formatSarifToolDriverRules(results) {
   // Only 1 image can be scanned at a time
-  const result = results[0]
-  const vulnerabilities = result.vulnerabilities
-  const compliances = result.compliances
+  const result = results[0];
+  const vulnerabilities = result.vulnerabilities;
+  const compliances = result.compliances;
 
-  let vulns = []
+  let vulns = [];
   if (vulnerabilities) {
     vulns = vulnerabilities.map(vuln => {
       return {
@@ -5225,14 +5232,14 @@ function formatSarifToolDriverRules(results) {
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-            '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-            '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+              '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
-      }
-    })
+      };
+    });
   }
 
-  let comps = []
+  let comps = [];
   if (compliances) {
     comps = compliances.map(comp => {
       return {
@@ -5246,26 +5253,26 @@ function formatSarifToolDriverRules(results) {
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-            '| --- | --- | --- |\n' +
-            '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+              '| --- | --- | --- |\n' +
+              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
-      }
-    })
+      };
+    });
   }
 
-  return [...vulns, ...comps]
+  return [...vulns, ...comps];
 }
 
 function formatSarifResults(results) {
   // Only 1 image can be scanned at a time
-  const result = results[0]
-  const imageName = result.name
-  let findings = []
+  const result = results[0];
+  const imageName = result.name;
+  let findings = [];
   if (result.vulnerabilities) {
-    findings = [...findings, ...result.vulnerabilities]
+    findings = [...findings, ...result.vulnerabilities];
   }
   if (result.compliances) {
-    findings = [...findings, ...result.compliances]
+    findings = [...findings, ...result.compliances];
   }
 
   if (findings) {
@@ -5289,62 +5296,74 @@ function formatSarifResults(results) {
             },
           },
         }],
-      }
-    })
+      };
+    });
   }
-  return []
+
+  return [];
 }
 
 function formatSarif(twistcliVersion, resultsFile) {
   try {
-    const scan = JSON.parse(fs.readFileSync(resultsFile, 'utf8'))
+    const scan = JSON.parse(fs.readFileSync(resultsFile, 'utf8'));
     const sarif = {
-      $schema: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
-      version: "2.1.0",
+      $schema: 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+      version: '2.1.0',
       runs: [{
         tool: {
           driver: {
-            name: "Prisma Cloud (twistcli)",
+            name: 'Prisma Cloud (twistcli)',
             version: `${twistcliVersion}`,
             rules: formatSarifToolDriverRules(scan.results),
-          }
+          },
         },
         results: formatSarifResults(scan.results),
       }],
-    }
-    return sarif
+    };
+    return sarif;
   } catch (err) {
-    core.setFailed(err.message)
+    core.setFailed(`Failed formatting SARIF: ${err.message}`);
+    process.exit(1);
   }
 }
 
 async function scan() {
-  // User inputs
-  const httpProxy = core.getInput('http_proxy')
-  const consoleUrl = core.getInput('pcc_console_url')
-  const username = core.getInput('pcc_user')
-  const password = core.getInput('pcc_pass')
-  const imageName = core.getInput('image_name')
-  const containerized = core.getInput('containerized').toLowerCase()
-  const resultsFile = core.getInput('results_file')
-  const sarifFile = core.getInput('sarif_file')
-  const dockerHost = core.getInput('docker_address') || process.env.DOCKER_HOST
+  const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
+  const consoleUrl = core.getInput('pcc_console_url');
+  const username = core.getInput('pcc_user');
+  const password = core.getInput('pcc_pass');
+  const imageName = core.getInput('image_name');
+  const containerized = core.getInput('containerized').toLowerCase();
+  const dockerHost = core.getInput('docker_host') || process.env.DOCKER_HOST;
+  const dockerTlsCaCert = core.getInput('docker_tlscacert');
+  const dockerTlsCert = core.getInput('docker_tlscert');
+  const dockerTlsKey = core.getInput('docker_tlskey');
+
+  const resultsFile = core.getInput('results_file');
+  const sarifFile = core.getInput('sarif_file');
 
   try {
-    const token = await getToken(consoleUrl, username, password)
-
-    let twistcliVersion
+    let token;
     try {
-      twistcliVersion = await getVersion(consoleUrl, token)
+      token = await authenticate(consoleUrl, username, password, httpProxy);
     } catch (err) {
-      core.setFailed(`Failed getting version: ${err.message}`)
+      core.setFailed(`Failed authenticating: ${err.message}`);
+      process.exit(1);
     }
-    twistcliVersion = twistcliVersion.replace(/"/g, '')
 
-    await getTwistcli(twistcliVersion, consoleUrl, token)
-    let twistcliCmd = ['twistcli']
+    let twistcliVersion;
+    try {
+      twistcliVersion = await getVersion(consoleUrl, token, httpProxy);
+    } catch (err) {
+      core.setFailed(`Failed getting version: ${err.message}`);
+      process.exit(1);
+    }
+    twistcliVersion = twistcliVersion.replace(/"/g, '');
+
+    await getTwistcli(twistcliVersion, consoleUrl, token);
+    let twistcliCmd = ['twistcli'];
     if (httpProxy) {
-      twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`])
+      twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`]);
     }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
@@ -5352,36 +5371,46 @@ async function scan() {
       `--user ${username}`, `--password ${password}`,
       `--output-file ${resultsFile}`,
       '--details',
-    ])
+    ]);
     if (dockerHost) {
-      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`])
+      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`]);
+    }
+    if (dockerTlsCaCert) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlsCaCert}`]);
+    }
+    if (dockerTlsCert) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlsCert}`]);
+    }
+    if (dockerTlsKey) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlsKey}`]);
     }
     if (TRUE_VALUES.includes(containerized)) {
-      twistcliCmd = twistcliCmd.concat(['--containerized'])
+      twistcliCmd = twistcliCmd.concat(['--containerized']);
     }
-    twistcliCmd = twistcliCmd.concat([imageName])
+    twistcliCmd = twistcliCmd.concat([imageName]);
 
     const exitCode = await exec(twistcliCmd.join(' '), undefined, {
-      ignoreReturnCode: true
-    })
+      ignoreReturnCode: true,
+    });
     if (exitCode > 0) {
-      core.setFailed('Image scan failed')
+      core.setFailed('Image scan failed');
     }
 
-    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)))
+    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)));
 
-    core.setOutput('results_file', resultsFile)
-    core.setOutput('sarif_file', sarifFile)
+    core.setOutput('results_file', resultsFile);
+    core.setOutput('sarif_file', sarifFile);
   } catch (err) {
-    core.setFailed(`Image scan failed: ${err.message}`)
+    core.setFailed(`Image scan failed: ${err.message}`);
+    process.exit(1);
   }
 }
 
 if (require.main === require.cache[eval('__filename')]) {
   try {
-    scan()
+    scan();
   } catch (err) {
-    core.setFailed(err.message)
+    core.setFailed(err.message);
   }
 }
 

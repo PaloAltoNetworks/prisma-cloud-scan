@@ -43,21 +43,23 @@ jobs:
 
 ## Properties
 ### Environment variables
-| Variable | Description | Required? | Default |
-|---|---|---|---|
-| `DOCKER_HOST` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No | |
+| Variable      | Description | Required? | Default |
+|---------------|---|---|---|
+| `DOCKER_HOST` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
 
 ### Inputs
 | Input | Description | Required? | Default |
 |---|---|---|---|
-| `http_proxy` | URL of your HTTP proxy if necessary for Internet access | No |  | 
 | `pcc_console_url` | URL of your Prisma Cloud Compute Console | Yes |  |
 | `pcc_user` | Username of a user with the CI user role | Yes |  |
 | `pcc_pass` | Password of a user with the CI user role | Yes |  |
 | `image_name` | Name (or ID) of the image to be scanned | Yes |  |
 | `results_file` | File to which scan results are written in JSON | No | `pcc_scan_results.json` |
 | `sarif_file` | File to which scan results are written in SARIF | No | `pcc_scan_results.sarif.json` |
-| `docker_address` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
+| `docker_host` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
+| `docker_tlscacert` | Path to the Docker CA certificate | No |  |
+| `docker_tlscert` | Path to the Docker client certificate | No |  |
+| `docker_tlskey` | Path to the Docker client private key | No |  |
 
 ### Outputs
 | Output | Description |

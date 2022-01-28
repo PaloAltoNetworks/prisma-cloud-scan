@@ -1,10 +1,10 @@
-const fs = require('fs')
-const fetch = require('node-fetch')
-const core = require('@actions/core')
-const tc = require('@actions/tool-cache')
-const { exec } = require('@actions/exec')
+const fs = require('fs');
+const axios = require('axios').default;
+const core = require('@actions/core');
+const { exec } = require('@actions/exec');
+const tc = require('@actions/tool-cache');
 
-const TRUE_VALUES = ['true', 'yes', 'y', '1']
+const TRUE_VALUES = ['true', 'yes', 'y', '1'];
 
 function toSentenceCase(string) {
   return string[0].toUpperCase() + string.slice(1).toLowerCase();
@@ -18,87 +18,92 @@ function joinUrlPath(...parts) {
 }
 
 // Wrapper around 'authenticate' Console API endpoint
-async function getToken(addr, user, pass) {
-  const authEndpoint = '/api/v1/authenticate'
-  let authUrl
+async function authenticate(url, user, pass) {
+  let parsedUrl;
   try {
-    authUrl = new URL(addr)
+    parsedUrl = new URL(url);
   } catch (err) {
-    core.setFailed(`Invalid Console address: ${addr}`)
+    console.log(`Invalid Console address: ${url}`);
+    process.exit(1);
   }
-  authUrl.pathname = joinUrlPath(authUrl.pathname, authEndpoint)
+  const endpoint = '/api/v1/authenticate';
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
+
   try {
-    const authResponse = await fetch(authUrl.toString(), {
-      method: 'POST',
+    const res = await axios({
+      method: 'post',
+      url: parsedUrl.toString(),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      data: {
         username: user,
         password: pass,
-      }),
-    })
-    const responseJson = await authResponse.json()
-
-    return responseJson.token
+      },
+    });
+    return res.data.token;
   } catch (err) {
-    core.setFailed(`Failed getting authentication token: ${err.message}`)
+    core.setFailed(`Failed getting authentication token: ${err.message}`);
+    process.exit(1);
   }
 }
 
 // Wrapper around 'version' Console API endpoint
-async function getVersion(addr, authToken) {
-  const versionEndpoint = '/api/v1/version'
-  let versionUrl
+async function getVersion(url, token) {
+  let parsedUrl;
   try {
-    versionUrl = new URL(addr)
+    parsedUrl = new URL(url);
   } catch (err) {
-    core.setFailed(`Invalid Console address: ${addr}`)
+    console.log(`Invalid Console address: ${url}`);
+    process.exit(1);
   }
-  versionUrl.pathname = joinUrlPath(versionUrl.pathname, versionEndpoint)
-  try {
-    const versionResponse = await fetch(versionUrl.toString(), {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    })
-    const responseText = await versionResponse.text()
+  const endpoint = '/api/v1/version';
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
 
-    return responseText
+  try {
+    const res = await axios({
+      method: 'get',
+      url: parsedUrl.toString(),
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return res.data;
   } catch (err) {
-    core.setFailed(`getVersion: ${err.message}`)
+    core.setFailed(`Failed getting version: ${err.message}`);
+    process.exit(1);
   }
 }
 
 // GitHub Action-specific wrapper around 'util/twistcli' Console API endpoint
 // Saves twistcli using GitHub Action's tool-cache library
-async function getTwistcli(version, addr, authToken) {
-  const twistcliEndpoint = '/api/v1/util/twistcli'
-  let twistcliUrl
+async function getTwistcli(version, url, authToken) {
+  let parsedUrl;
   try {
-    twistcliUrl = new URL(addr)
+    parsedUrl = new URL(url);
   } catch (err) {
-    core.setFailed(`Invalid Console address: ${addr}`)
+    console.log(`Invalid Console address: ${url}`);
+    process.exit(1);
   }
-  twistcliUrl.pathname = joinUrlPath(twistcliUrl.pathname, twistcliEndpoint)
+  const endpoint = '/api/v1/util/twistcli';
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
 
-  let twistcli = tc.find('twistcli', version)
+  let twistcli = tc.find('twistcli', version);
   if (!twistcli) {
-    const twistcliPath = await tc.downloadTool(twistcliUrl.toString(), undefined, `Bearer ${authToken}`)
-    await exec(`chmod a+x ${twistcliPath}`)
-    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version)
+    const twistcliPath = await tc.downloadTool(parsedUrl.toString(), undefined, `Bearer ${authToken}`);
+    await exec(`chmod a+x ${twistcliPath}`);
+    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version);
   }
-
-  core.addPath(twistcli)
+  core.addPath(twistcli);
 }
 
 function formatSarifToolDriverRules(results) {
   // Only 1 image can be scanned at a time
-  const result = results[0]
-  const vulnerabilities = result.vulnerabilities
-  const compliances = result.compliances
+  const result = results[0];
+  const vulnerabilities = result.vulnerabilities;
+  const compliances = result.compliances;
 
-  let vulns = []
+  let vulns = [];
   if (vulnerabilities) {
     vulns = vulnerabilities.map(vuln => {
       return {
@@ -112,14 +117,14 @@ function formatSarifToolDriverRules(results) {
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-            '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-            '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+              '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
-      }
-    })
+      };
+    });
   }
 
-  let comps = []
+  let comps = [];
   if (compliances) {
     comps = compliances.map(comp => {
       return {
@@ -133,26 +138,26 @@ function formatSarifToolDriverRules(results) {
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-            '| --- | --- | --- |\n' +
-            '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+              '| --- | --- | --- |\n' +
+              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
-      }
-    })
+      };
+    });
   }
 
-  return [...vulns, ...comps]
+  return [...vulns, ...comps];
 }
 
 function formatSarifResults(results) {
   // Only 1 image can be scanned at a time
-  const result = results[0]
-  const imageName = result.name
-  let findings = []
+  const result = results[0];
+  const imageName = result.name;
+  let findings = [];
   if (result.vulnerabilities) {
-    findings = [...findings, ...result.vulnerabilities]
+    findings = [...findings, ...result.vulnerabilities];
   }
   if (result.compliances) {
-    findings = [...findings, ...result.compliances]
+    findings = [...findings, ...result.compliances];
   }
 
   if (findings) {
@@ -176,62 +181,74 @@ function formatSarifResults(results) {
             },
           },
         }],
-      }
-    })
+      };
+    });
   }
-  return []
+
+  return [];
 }
 
 function formatSarif(twistcliVersion, resultsFile) {
   try {
-    const scan = JSON.parse(fs.readFileSync(resultsFile, 'utf8'))
+    const scan = JSON.parse(fs.readFileSync(resultsFile, 'utf8'));
     const sarif = {
-      $schema: "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
-      version: "2.1.0",
+      $schema: 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+      version: '2.1.0',
       runs: [{
         tool: {
           driver: {
-            name: "Prisma Cloud (twistcli)",
+            name: 'Prisma Cloud (twistcli)',
             version: `${twistcliVersion}`,
             rules: formatSarifToolDriverRules(scan.results),
-          }
+          },
         },
         results: formatSarifResults(scan.results),
       }],
-    }
-    return sarif
+    };
+    return sarif;
   } catch (err) {
-    core.setFailed(err.message)
+    core.setFailed(`Failed formatting SARIF: ${err.message}`);
+    process.exit(1);
   }
 }
 
 async function scan() {
-  // User inputs
-  const httpProxy = core.getInput('http_proxy')
-  const consoleUrl = core.getInput('pcc_console_url')
-  const username = core.getInput('pcc_user')
-  const password = core.getInput('pcc_pass')
-  const imageName = core.getInput('image_name')
-  const containerized = core.getInput('containerized').toLowerCase()
-  const resultsFile = core.getInput('results_file')
-  const sarifFile = core.getInput('sarif_file')
-  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_HOST
+  const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
+  const consoleUrl = core.getInput('pcc_console_url');
+  const username = core.getInput('pcc_user');
+  const password = core.getInput('pcc_pass');
+  const imageName = core.getInput('image_name');
+  const containerized = core.getInput('containerized').toLowerCase();
+  const dockerHost = core.getInput('docker_host') || process.env.DOCKER_HOST;
+  const dockerTlsCaCert = core.getInput('docker_tlscacert');
+  const dockerTlsCert = core.getInput('docker_tlscert');
+  const dockerTlsKey = core.getInput('docker_tlskey');
+
+  const resultsFile = core.getInput('results_file');
+  const sarifFile = core.getInput('sarif_file');
 
   try {
-    const token = await getToken(consoleUrl, username, password)
-
-    let twistcliVersion
+    let token;
     try {
-      twistcliVersion = await getVersion(consoleUrl, token)
+      token = await authenticate(consoleUrl, username, password, httpProxy);
     } catch (err) {
-      core.setFailed(`Failed getting version: ${err.message}`)
+      core.setFailed(`Failed authenticating: ${err.message}`);
+      process.exit(1);
     }
-    twistcliVersion = twistcliVersion.replace(/"/g, '')
 
-    await getTwistcli(twistcliVersion, consoleUrl, token)
-    let twistcliCmd = ['twistcli']
+    let twistcliVersion;
+    try {
+      twistcliVersion = await getVersion(consoleUrl, token, httpProxy);
+    } catch (err) {
+      core.setFailed(`Failed getting version: ${err.message}`);
+      process.exit(1);
+    }
+    twistcliVersion = twistcliVersion.replace(/"/g, '');
+
+    await getTwistcli(twistcliVersion, consoleUrl, token);
+    let twistcliCmd = ['twistcli'];
     if (httpProxy) {
-      twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`])
+      twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`]);
     }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
@@ -239,35 +256,45 @@ async function scan() {
       `--user ${username}`, `--password ${password}`,
       `--output-file ${resultsFile}`,
       '--details',
-    ])
-    if (dockerAddress) {
-      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`])
+    ]);
+    if (dockerHost) {
+      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`]);
+    }
+    if (dockerTlsCaCert) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlsCaCert}`]);
+    }
+    if (dockerTlsCert) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlsCert}`]);
+    }
+    if (dockerTlsKey) {
+      twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlsKey}`]);
     }
     if (TRUE_VALUES.includes(containerized)) {
-      twistcliCmd = twistcliCmd.concat(['--containerized'])
+      twistcliCmd = twistcliCmd.concat(['--containerized']);
     }
-    twistcliCmd = twistcliCmd.concat([imageName])
+    twistcliCmd = twistcliCmd.concat([imageName]);
 
     const exitCode = await exec(twistcliCmd.join(' '), undefined, {
-      ignoreReturnCode: true
-    })
+      ignoreReturnCode: true,
+    });
     if (exitCode > 0) {
-      core.setFailed('Image scan failed')
+      core.setFailed('Image scan failed');
     }
 
-    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)))
+    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)));
 
-    core.setOutput('results_file', resultsFile)
-    core.setOutput('sarif_file', sarifFile)
+    core.setOutput('results_file', resultsFile);
+    core.setOutput('sarif_file', sarifFile);
   } catch (err) {
-    core.setFailed(`Image scan failed: ${err.message}`)
+    core.setFailed(`Image scan failed: ${err.message}`);
+    process.exit(1);
   }
 }
 
 if (require.main === module) {
   try {
-    scan()
+    scan();
   } catch (err) {
-    core.setFailed(err.message)
+    core.setFailed(err.message);
   }
 }

@@ -3,7 +3,6 @@
   "description": "Scan with Prisma Cloud",
   "author": "Palo Alto Networks",
   "license": "Apache-2.0",
-  "main": "index.js",
   "scripts": {
     "lint": "eslint index.js",
     "build": "ncc build index.js --license licenses.txt"
@@ -32,10 +31,10 @@
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/tool-cache": "^1.6.1",
-    "node-fetch": "^2.6.1"
+    "axios": "^0.24.0"
   },
   "devDependencies": {
-    "eslint": "^7.23.0",
-    "@vercel/ncc": "^0.33.1"
+    "@vercel/ncc": "^0.33.1",
+    "eslint": "^7.23.0"
   }
 }
