@@ -9434,8 +9434,8 @@ function formatSarifToolDriverRules(results) {
         help: {
           text: '',
           markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
-              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-              '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+            '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+            '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
       };
     });
@@ -9455,8 +9455,8 @@ function formatSarifToolDriverRules(results) {
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-              '| --- | --- | --- |\n' +
-              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+            '| --- | --- | --- |\n' +
+            '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
       };
     });
@@ -9536,7 +9536,7 @@ async function scan() {
   const password = core.getInput('pcc_pass');
   const imageName = core.getInput('image_name');
   const containerized = core.getInput('containerized').toLowerCase();
-  const dockerHost = core.getInput('docker_host') || process.env.DOCKER_HOST;
+  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS || process.env.DOCKER_HOST;
   const dockerTlsCaCert = core.getInput('docker_tlscacert');
   const dockerTlsCert = core.getInput('docker_tlscert');
   const dockerTlsKey = core.getInput('docker_tlskey');
@@ -9574,8 +9574,8 @@ async function scan() {
       `--output-file ${resultsFile}`,
       '--details',
     ]);
-    if (dockerHost) {
-      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerHost}`]);
+    if (dockerAddress) {
+      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`]);
     }
     if (dockerTlsCaCert) {
       twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlsCaCert}`]);
