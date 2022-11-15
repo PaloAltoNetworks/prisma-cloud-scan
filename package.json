@@ -7,7 +7,7 @@
     "lint": "eslint index.js",
     "build": "ncc build index.js --license licenses.txt"
   },
-  "homepage": "https://github.com/thecanadianroot/prisma-cloud-scan#readme",
+  "homepage": "https://github.com/paloaltonetworks/prisma-cloud-scan#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/paloaltonetworks/prisma-cloud-scan.git"
