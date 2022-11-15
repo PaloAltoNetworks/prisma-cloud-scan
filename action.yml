@@ -27,7 +27,7 @@ inputs:
     description: File to which scan results are written in SARIF
     required: false
     default: pcc_scan_results.sarif.json
-  docker_host:
+  docker_address:
     description: Address of the Docker daemon
     required: false
   docker_tlscacert:
