@@ -1,7 +1,7 @@
 const fs = require('fs');
 const axios = require('axios');
 const core = require('@actions/core');
-const {exec} = require('@actions/exec');
+const { exec } = require('@actions/exec');
 const tc = require('@actions/tool-cache');
 
 const TRUE_VALUES = ['true', 'yes', 'y', '1'];
@@ -14,8 +14,7 @@ function toSentenceCase(string) {
 // Necessary for Console URLs that already have a path (all SaaS Consoles)
 function joinUrlPath(...parts) {
   // Filter handles cases where Console URL pathname is '/' in order to avoid '//api/v1/etc/' (double slash)
-  return '/' + parts.filter(part => part !== '/').map(
-      part => part.replace(/(^\/|\/$)/g, '')).join('/');
+  return '/' + parts.filter(part => part !== '/').map(part => part.replace(/(^\/|\/$)/g, '')).join('/');
 }
 
 // Wrapper around 'authenticate' Console API endpoint
@@ -91,11 +90,9 @@ async function getTwistcli(version, url, authToken) {
 
   let twistcli = tc.find('twistcli', version);
   if (!twistcli) {
-    const twistcliPath = await tc.downloadTool(parsedUrl.toString(), undefined,
-        `Bearer ${authToken}`);
+    const twistcliPath = await tc.downloadTool(parsedUrl.toString(), undefined, `Bearer ${authToken}`);
     await exec(`chmod a+x ${twistcliPath}`);
-    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli',
-        version);
+    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version);
   }
   core.addPath(twistcli);
 }
@@ -115,18 +112,13 @@ function formatSarifToolDriverRules(results) {
           text: `[Prisma Cloud] ${vuln.id} in ${vuln.packageName} (${vuln.severity})`,
         },
         fullDescription: {
-          text: `${toSentenceCase(
-              vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`,
+          text: `${toSentenceCase(vuln.severity)} severity ${vuln.id} found in ${vuln.packageName} version ${vuln.packageVersion}`,
         },
         help: {
           text: '',
-          markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n'
-              +
-              '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
-              '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity
-              + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | '
-              + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed')
-              + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
+          markdown: '| CVE | Severity | CVSS | Package | Version | Fix Status | Published | Discovered |\n' +
+            '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
+            '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
       };
     });
@@ -141,15 +133,13 @@ function formatSarifToolDriverRules(results) {
           text: `[Prisma Cloud] Compliance check ${comp.id} violated (${comp.severity})`,
         },
         fullDescription: {
-          text: `${toSentenceCase(
-              comp.severity)} severity compliance check "${comp.title}" violated`,
+          text: `${toSentenceCase(comp.severity)} severity compliance check "${comp.title}" violated`,
         },
         help: {
           text: '',
           markdown: '| Compliance Check | Severity | Title |\n' +
-              '| --- | --- | --- |\n' +
-              '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title
-              + ' |',
+            '| --- | --- | --- |\n' +
+            '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
         },
       };
     });
@@ -223,15 +213,13 @@ function formatSarif(twistcliVersion, resultsFile) {
 }
 
 async function scan() {
-  const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY
-      || process.env.http_proxy || process.env.HTTP_PROXY;
+  const httpProxy = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
   const consoleUrl = core.getInput('pcc_console_url');
   const username = core.getInput('pcc_user');
   const password = core.getInput('pcc_pass');
   const imageName = core.getInput('image_name');
   const containerized = core.getInput('containerized').toLowerCase();
-  const dockerAddress = core.getInput('docker_address')
-      || process.env.DOCKER_ADDRESS || process.env.DOCKER_HOST;
+  const dockerAddress = core.getInput('docker_address') || process.env.DOCKER_ADDRESS || process.env.DOCKER_HOST;
   const dockerTlsCaCert = core.getInput('docker_tlscacert');
   const dockerTlsCert = core.getInput('docker_tlscert');
   const dockerTlsKey = core.getInput('docker_tlskey');
@@ -273,8 +261,7 @@ async function scan() {
       twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`]);
     }
     if (dockerTlsCaCert) {
-      twistcliCmd = twistcliCmd.concat(
-          [`--docker-tlscacert ${dockerTlsCaCert}`]);
+      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlsCaCert}`]);
     }
     if (dockerTlsCert) {
       twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlsCert}`]);
@@ -294,8 +281,7 @@ async function scan() {
       core.setFailed('Image scan failed');
     }
 
-    fs.writeFileSync(sarifFile,
-        JSON.stringify(formatSarif(twistcliVersion, resultsFile)));
+    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)));
 
     core.setOutput('results_file', resultsFile);
     core.setOutput('sarif_file', sarifFile);
