@@ -223,6 +223,7 @@ async function scan() {
   const dockerTlsCaCert = core.getInput('docker_tlscacert');
   const dockerTlsCert = core.getInput('docker_tlscert');
   const dockerTlsKey = core.getInput('docker_tlskey');
+  const project = core.getInput('project');
 
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
@@ -268,6 +269,9 @@ async function scan() {
     }
     if (dockerTlsKey) {
       twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlsKey}`]);
+    }
+    if (project) {
+      twistcliCmd = twistcliCmd.concat([`--project ${project}`]);
     }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
