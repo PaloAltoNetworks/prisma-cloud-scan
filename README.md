@@ -55,6 +55,7 @@ jobs:
 | `pcc_user` | Username of a user with the CI user role | Yes |  |
 | `pcc_pass` | Password of a user with the CI user role | Yes |  |
 | `image_name` | Name (or ID) of the image to be scanned | Yes |  |
+| `project` | Tenant project context for the command | No |  |
 | `results_file` | File to which scan results are written in JSON | No | `pcc_scan_results.json` |
 | `sarif_file` | File to which scan results are written in SARIF | No | `pcc_scan_results.sarif.json` |
 | `docker_address` | Address of the Docker daemon (e.g. tcp://localhost:2375) | No |  |
