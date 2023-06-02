@@ -148,6 +148,29 @@ function formatSarifToolDriverRules(results) {
   return [...vulns, ...comps];
 }
 
+/**
+ * convert prima severity to github severity
+ * @param {string} severity
+ * @throws {Error} unknown severity
+ * @returns string
+ */
+function convertPrismaSeverity(severity) {
+  // prisma: critical, high, medium, low
+  // gh: error, warning, note, none
+  switch (severity) {
+    case "critical":
+      return "error";
+    case "high":
+      return "warning";
+    case "medium":
+      return "note";
+    case "low":
+      return "none";
+    default:
+      throw new Error(`Unknown severity: ${severity}`);
+  }
+}
+
 function formatSarifResults(results) {
   // Only 1 image can be scanned at a time
   const result = results[0];
@@ -164,7 +187,7 @@ function formatSarifResults(results) {
     return findings.map(finding => {
       return {
         ruleId: `${finding.id}`,
-        level: 'warning',
+        level: `${convertPrismaSeverity(finding.severity)}`,
         message: {
           text: `Description:\n${finding.description}`,
         },
