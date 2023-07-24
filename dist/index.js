@@ -14056,10 +14056,24 @@ function formatSarifToolDriverRules(results) {
   const result = results[0];
   const vulnerabilities = result.vulnerabilities;
   const compliances = result.compliances;
+  const severityLevel = {
+            "critical": "10.0",
+            "high": "8.9",
+	    "important": "8.9",
+	    "moderate": "6.9",
+            "medium": "6.9",
+            "low": "3.9",
+	    "negligible": "3.9",
+            "none": "0.0",
+  };
 
   let vulns = [];
   if (vulnerabilities) {
     vulns = vulnerabilities.map(vuln => {
+      let severtytocvss;
+      if (vuln.severity) {
+            severtytocvss = severityLevel[vuln.severity.toString().toLowerCase()] || '0.0';
+      }
       return {
         id: `${vuln.id}`,
         shortDescription: {
@@ -14074,6 +14088,9 @@ function formatSarifToolDriverRules(results) {
             '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
             '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
+	properties: {
+              'security-severity': severtytocvss,
+        },
       };
     });
   }
@@ -14081,6 +14098,9 @@ function formatSarifToolDriverRules(results) {
   let comps = [];
   if (compliances) {
     comps = compliances.map(comp => {
+      if (comp.severity) {
+            severtytocvss = severityLevel[comp.severity.toString().toLowerCase()] || '0.0';
+      }
       return {
         id: `${comp.id}`,
         shortDescription: {
@@ -14094,6 +14114,9 @@ function formatSarifToolDriverRules(results) {
           markdown: '| Compliance Check | Severity | Title |\n' +
             '| --- | --- | --- |\n' +
             '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
+        },
+	properties: {
+              'security-severity': severtytocvss,
         },
       };
     });
@@ -14115,10 +14138,13 @@ function convertPrismaSeverity(severity) {
     case "critical":
       return "error";
     case "high":
+    case "important":
       return "warning";
     case "medium":
+    case "moderate":
       return "note";
     case "low":
+    case "negligible":
       return "none";
     default:
       throw new Error(`Unknown severity: ${severity}`);
