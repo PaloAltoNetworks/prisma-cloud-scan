@@ -13957,6 +13957,7 @@ const axios = __nccwpck_require__(8757);
 const core = __nccwpck_require__(2186);
 const { exec } = __nccwpck_require__(1514);
 const tc = __nccwpck_require__(7784);
+const os = __nccwpck_require__(2037);
 
 const TRUE_VALUES = ['true', 'yes', 'y', '1'];
 
@@ -14031,7 +14032,7 @@ async function getVersion(url, token) {
 
 // GitHub Action-specific wrapper around 'util/twistcli' Console API endpoint
 // Saves twistcli using GitHub Action's tool-cache library
-async function getTwistcli(version, url, authToken) {
+async function getTwistcli(version, url, authToken, platform, architecture) {
   let parsedUrl;
   try {
     parsedUrl = new URL(url);
@@ -14039,16 +14040,30 @@ async function getTwistcli(version, url, authToken) {
     console.log(`Invalid Console address: ${url}`);
     process.exit(1);
   }
-  const endpoint = '/api/v1/util/twistcli';
-  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
+  let endpointPrefix = '';
+  let endpointValue = 'twistcli';
+  
+  if(platform === 'win32') {
+    endpointPrefix = 'windows/';
+    endpointValue = 'twistcli.exe';
+  } else if(platform === 'darwin') {
+    endpointPrefix = 'osx/';
+    if (architecture === 'arm64') endpointPrefix += 'arm64/';
+  } else if(platform === 'linux') {
+    if (architecture === 'arm64') endpointPrefix += 'arm64/';
+  }
+
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, '/api/v1/util/' + endpointPrefix + endpointValue);
 
   let twistcli = tc.find('twistcli', version);
   if (!twistcli) {
     const twistcliPath = await tc.downloadTool(parsedUrl.toString(), undefined, `Bearer ${authToken}`);
-    await exec(`chmod a+x ${twistcliPath}`);
-    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version);
+    if (platform !== 'win32') await exec(`chmod a+x ${twistcliPath}`);
+    twistcli = await tc.cacheFile(twistcliPath, endpointValue, 'twistcli', version);
   }
   core.addPath(twistcli);
+
+  return endpointValue;
 }
 
 function formatSarifToolDriverRules(results) {
@@ -14056,24 +14071,10 @@ function formatSarifToolDriverRules(results) {
   const result = results[0];
   const vulnerabilities = result.vulnerabilities;
   const compliances = result.compliances;
-  const severityLevel = {
-            "critical": "10.0",
-            "high": "8.9",
-	    "important": "8.9",
-	    "moderate": "6.9",
-            "medium": "6.9",
-            "low": "3.9",
-	    "negligible": "3.9",
-            "none": "0.0",
-  };
 
   let vulns = [];
   if (vulnerabilities) {
     vulns = vulnerabilities.map(vuln => {
-      let severtytocvss;
-      if (vuln.severity) {
-            severtytocvss = severityLevel[vuln.severity.toString().toLowerCase()] || '0.0';
-      }
       return {
         id: `${vuln.id}`,
         shortDescription: {
@@ -14088,9 +14089,6 @@ function formatSarifToolDriverRules(results) {
             '| --- | --- | --- | --- | --- | --- | --- | --- |\n' +
             '| [' + vuln.id + '](' + vuln.link + ') | ' + vuln.severity + ' | ' + (vuln.cvss || 'N/A') + ' | ' + vuln.packageName + ' | ' + vuln.packageVersion + ' | ' + (vuln.status || 'not fixed') + ' | ' + vuln.publishedDate + ' | ' + vuln.discoveredDate + ' |',
         },
-	properties: {
-              'security-severity': severtytocvss,
-        },
       };
     });
   }
@@ -14098,9 +14096,6 @@ function formatSarifToolDriverRules(results) {
   let comps = [];
   if (compliances) {
     comps = compliances.map(comp => {
-      if (comp.severity) {
-            severtytocvss = severityLevel[comp.severity.toString().toLowerCase()] || '0.0';
-      }
       return {
         id: `${comp.id}`,
         shortDescription: {
@@ -14114,9 +14109,6 @@ function formatSarifToolDriverRules(results) {
           markdown: '| Compliance Check | Severity | Title |\n' +
             '| --- | --- | --- |\n' +
             '| ' + comp.id + ' | ' + comp.severity + ' | ' + comp.title + ' |',
-        },
-	properties: {
-              'security-severity': severtytocvss,
         },
       };
     });
@@ -14138,13 +14130,10 @@ function convertPrismaSeverity(severity) {
     case "critical":
       return "error";
     case "high":
-    case "important":
       return "warning";
     case "medium":
-    case "moderate":
       return "note";
     case "low":
-    case "negligible":
       return "none";
     default:
       throw new Error(`Unknown severity: ${severity}`);
@@ -14248,8 +14237,8 @@ async function scan() {
     }
     twistcliVersion = twistcliVersion.replace(/"/g, '');
 
-    await getTwistcli(twistcliVersion, consoleUrl, token);
-    let twistcliCmd = ['twistcli'];
+    let twistcliCmd = await getTwistcli(twistcliVersion, consoleUrl, token, os.platform(), os.arch());
+    twistcliCmd = [twistcliCmd];
     if (httpProxy) {
       twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`]);
     }

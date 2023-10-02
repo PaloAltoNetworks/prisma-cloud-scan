@@ -3,6 +3,7 @@ const axios = require('axios');
 const core = require('@actions/core');
 const { exec } = require('@actions/exec');
 const tc = require('@actions/tool-cache');
+const os = require('os');
 
 const TRUE_VALUES = ['true', 'yes', 'y', '1'];
 
@@ -77,7 +78,7 @@ async function getVersion(url, token) {
 
 // GitHub Action-specific wrapper around 'util/twistcli' Console API endpoint
 // Saves twistcli using GitHub Action's tool-cache library
-async function getTwistcli(version, url, authToken) {
+async function getTwistcli(version, url, authToken, platform, architecture) {
   let parsedUrl;
   try {
     parsedUrl = new URL(url);
@@ -85,16 +86,30 @@ async function getTwistcli(version, url, authToken) {
     console.log(`Invalid Console address: ${url}`);
     process.exit(1);
   }
-  const endpoint = '/api/v1/util/twistcli';
-  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, endpoint);
+  let endpointPrefix = '';
+  let endpointValue = 'twistcli';
+  
+  if(platform === 'win32') {
+    endpointPrefix = 'windows/';
+    endpointValue = 'twistcli.exe';
+  } else if(platform === 'darwin') {
+    endpointPrefix = 'osx/';
+    if (architecture === 'arm64') endpointPrefix += 'arm64/';
+  } else if(platform === 'linux') {
+    if (architecture === 'arm64') endpointPrefix += 'arm64/';
+  }
+
+  parsedUrl.pathname = joinUrlPath(parsedUrl.pathname, '/api/v1/util/' + endpointPrefix + endpointValue);
 
   let twistcli = tc.find('twistcli', version);
   if (!twistcli) {
     const twistcliPath = await tc.downloadTool(parsedUrl.toString(), undefined, `Bearer ${authToken}`);
-    await exec(`chmod a+x ${twistcliPath}`);
-    twistcli = await tc.cacheFile(twistcliPath, 'twistcli', 'twistcli', version);
+    if (platform !== 'win32') await exec(`chmod a+x ${twistcliPath}`);
+    twistcli = await tc.cacheFile(twistcliPath, endpointValue, 'twistcli', version);
   }
   core.addPath(twistcli);
+
+  return endpointValue;
 }
 
 function formatSarifToolDriverRules(results) {
@@ -268,8 +283,8 @@ async function scan() {
     }
     twistcliVersion = twistcliVersion.replace(/"/g, '');
 
-    await getTwistcli(twistcliVersion, consoleUrl, token);
-    let twistcliCmd = ['twistcli'];
+    let twistcliCmd = await getTwistcli(twistcliVersion, consoleUrl, token, os.platform(), os.arch());
+    twistcliCmd = [twistcliCmd];
     if (httpProxy) {
       twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`]);
     }
