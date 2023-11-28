@@ -16,6 +16,9 @@ inputs:
   image_name:
     description: Name (or ID) of the image to be scanned
     required: true
+  project:
+    description: Tenant project context for the command
+    required: false
   containerized:
     description: Run the scan from inside a running container (must be 'true', 'yes', 'y', or '1')
     required: false
