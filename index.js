@@ -170,9 +170,11 @@ function formatSarifToolDriverRules(results) {
  * @returns string
  */
 function convertPrismaSeverity(severity) {
-  // prisma: critical, high, medium, low
+  // prisma: critical, high, important, medium, low
   // gh: error, warning, note, none
   switch (severity) {
+    case "important":
+      return "warning";  
     case "critical":
       return "error";
     case "high":
@@ -182,7 +184,7 @@ function convertPrismaSeverity(severity) {
     case "low":
       return "none";
     default:
-      throw new Error(`Unknown severity: ${severity}`);
+      throw new Error(`Unknown severities: ${severity}`);
   }
 }
 
