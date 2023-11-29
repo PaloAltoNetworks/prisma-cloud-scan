@@ -173,12 +173,12 @@ function convertPrismaSeverity(severity) {
   // prisma: critical, high, important, medium, low
   // gh: error, warning, note, none
   switch (severity) {
+    case "important":
+      return "warning";  
     case "critical":
       return "error";
     case "high":
       return "warning";
-    case "important":
-      return "warning";  
     case "medium":
       return "note";
     case "low":
