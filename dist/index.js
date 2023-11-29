@@ -14542,7 +14542,7 @@ function formatSarifToolDriverRules(results) {
  * @returns string
  */
 function convertPrismaSeverity(severity) {
-  // prisma: critical, high, important, medium, low
+  // prisma: critical, high, important, medium, moderate, low
   // gh: error, warning, note, none
   switch (severity) {
     case "critical":
@@ -14553,6 +14553,8 @@ function convertPrismaSeverity(severity) {
       return "warning";  
     case "medium":
       return "note";
+    case "moderate":
+      return "note";  
     case "low":
       return "none";
     default:
