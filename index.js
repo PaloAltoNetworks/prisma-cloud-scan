@@ -177,6 +177,8 @@ function convertPrismaSeverity(severity) {
       return "error";
     case "high":
       return "warning";
+    case "important":
+        return "warning";  
     case "medium":
       return "note";
     case "low":
