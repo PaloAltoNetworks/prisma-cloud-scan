@@ -14542,7 +14542,7 @@ function formatSarifToolDriverRules(results) {
  * @returns string
  */
 function convertPrismaSeverity(severity) {
-  // prisma: critical, high, important, medium, moderate, low
+  // prisma: critical, high, important, medium, moderate, unimportant, low
   // gh: error, warning, note, none
   switch (severity) {
     case "critical":
@@ -14550,17 +14550,20 @@ function convertPrismaSeverity(severity) {
     case "high":
       return "warning";
     case "important":
-      return "warning";  
+      return "warning";
     case "medium":
       return "note";
     case "moderate":
-      return "note";  
+      return "note";
     case "low":
+      return "none";
+    case "unimportant":
       return "none";
     default:
       throw new Error(`Unknown severity: ${severity}`);
   }
 }
+
 
 function formatSarifResults(results) {
   // Only 1 image can be scanned at a time
