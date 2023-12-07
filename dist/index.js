@@ -14702,9 +14702,15 @@ async function scan() {
       core.setFailed('Image scan failed');
     }
 
-    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)));
+    const resultsFileFiltered = arr.filter(
+      (resultsFile, index, self) =>
+        index ===
+        self.findIndex((t) => t.id === thing.id )
+    ); 
 
-    core.setOutput('results_file', resultsFile);
+    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFileFiltered)));
+
+    core.setOutput('results_file', resultsFileFiltered);
     core.setOutput('sarif_file', sarifFile);
   } catch (err) {
     core.setFailed(`Image scan failed: ${err.message}`);
