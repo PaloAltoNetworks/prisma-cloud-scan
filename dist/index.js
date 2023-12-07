@@ -14702,7 +14702,7 @@ async function scan() {
       core.setFailed('Image scan failed');
     }
 
-    const resultsFileFiltered = resultsFile.filter(
+    const resultsFileFiltered = resultsFile.results.filter(
       (thing, index, self) =>
         index ===
         self.findIndex((t) => t.id === thing.id )
