@@ -14490,9 +14490,16 @@ function formatSarifToolDriverRules(results) {
   const vulnerabilities = result.vulnerabilities;
   const compliances = result.compliances;
 
+  const vulnerabilitiesFiltered = vulnerabilities.filter(
+    (thing, index, self) =>
+      index ===
+      self.findIndex((t) => t.id === thing.id )
+  ); 
+
+
   let vulns = [];
-  if (vulnerabilities) {
-    vulns = vulnerabilities.map(vuln => {
+  if (vulnerabilitiesFiltered) {
+    vulns = vulnerabilitiesFiltered.map(vuln => {
       return {
         id: `${vuln.id}`,
         shortDescription: {
@@ -14702,17 +14709,9 @@ async function scan() {
       core.setFailed('Image scan failed');
     }
 
-    vulnResults = resultsFile.results
+    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFile)));
 
-    const resultsFileFiltered = vulnResults.filter(
-      (thing, index, self) =>
-        index ===
-        self.findIndex((t) => t.id === thing.id )
-    ); 
-
-    fs.writeFileSync(sarifFile, JSON.stringify(formatSarif(twistcliVersion, resultsFileFiltered)));
-
-    core.setOutput('results_file', resultsFileFiltered);
+    core.setOutput('results_file', resultsFile);
     core.setOutput('sarif_file', sarifFile);
   } catch (err) {
     core.setFailed(`Image scan failed: ${err.message}`);
