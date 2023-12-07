@@ -14490,9 +14490,16 @@ function formatSarifToolDriverRules(results) {
   const vulnerabilities = result.vulnerabilities;
   const compliances = result.compliances;
 
+  const vulnerabilitiesFiltered = vulnerabilities.filter(
+    (thing, index, self) =>
+      index ===
+      self.findIndex((t) => t.id === thing.id )
+  ); 
+
+
   let vulns = [];
-  if (vulnerabilities) {
-    vulns = vulnerabilities.map(vuln => {
+  if (vulnerabilitiesFiltered) {
+    vulns = vulnerabilitiesFiltered.map(vuln => {
       return {
         id: `${vuln.id}`,
         shortDescription: {
