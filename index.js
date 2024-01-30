@@ -118,9 +118,16 @@ function formatSarifToolDriverRules(results) {
   const vulnerabilities = result.vulnerabilities;
   const compliances = result.compliances;
 
+  const vulnerabilitiesFiltered = (vulnerabilities || []).filter(
+    (thing, index, self) =>
+      index ===
+      self.findIndex((t) => t.id === thing.id )
+  ); 
+
+
   let vulns = [];
-  if (vulnerabilities) {
-    vulns = vulnerabilities.map(vuln => {
+  if (vulnerabilitiesFiltered) {
+    vulns = vulnerabilitiesFiltered.map(vuln => {
       return {
         id: `${vuln.id}`,
         shortDescription: {
@@ -170,23 +177,29 @@ function formatSarifToolDriverRules(results) {
  * @returns string
  */
 function convertPrismaSeverity(severity) {
-  // prisma: critical, high, important, medium, low
+  // prisma: critical, high, important, medium, moderate, unimportant, low
   // gh: error, warning, note, none
   switch (severity) {
-    case "important":
-      return "warning";  
     case "critical":
       return "error";
     case "high":
       return "warning";
+    case "important":
+      return "warning";
     case "medium":
+      return "note";
+    case "moderate":
       return "note";
     case "low":
       return "none";
+    case "unimportant":
+    case "negligible":
+      return "none";
     default:
-      throw new Error(`Unknown severities: ${severity}`);
+      throw new Error(`Unknown severity: ${severity}`);
   }
 }
+
 
 function formatSarifResults(results) {
   // Only 1 image can be scanned at a time
