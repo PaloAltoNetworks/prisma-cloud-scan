@@ -48,5 +48,5 @@ outputs:
   sarif_file:
     description: File containing scan results in SARIF
 runs:
-  using: node16
+  using: node20
   main: dist/index.js
