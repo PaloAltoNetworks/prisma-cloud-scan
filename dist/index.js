@@ -14148,6 +14148,7 @@ function convertPrismaSeverity(severity) {
       return "none";
     case "unimportant":
     case "negligible":
+    case "unreviewed":  
       return "none";
     default:
       throw new Error(`Unknown severity: ${severity}`);
