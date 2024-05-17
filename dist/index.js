@@ -14148,7 +14148,8 @@ function convertPrismaSeverity(severity) {
       return "none";
     case "unimportant":
     case "negligible":
-    case "unreviewed":  
+    case "unreviewed":
+    case "unassigned": 
       return "none";
     default:
       throw new Error(`Unknown severity: ${severity}`);
@@ -14232,6 +14233,7 @@ async function scan() {
   const dockerTlsCert = core.getInput('docker_tlscert');
   const dockerTlsKey = core.getInput('docker_tlskey');
   const project = core.getInput('project');
+  const twistcli_debug = core.getInput('twistcli_debug');
 
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
@@ -14258,6 +14260,9 @@ async function scan() {
     twistcliCmd = [twistcliCmd];
     if (httpProxy) {
       twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`]);
+    }
+    if (TRUE_VALUES.includes(twistcli_debug)) {
+      twistcliCmd = twistcliCmd.concat(['--debug']);
     }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
