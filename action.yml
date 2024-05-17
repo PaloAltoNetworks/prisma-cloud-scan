@@ -42,6 +42,9 @@ inputs:
   docker_tlskey:
     description: Path to the Docker client private key
     required: false
+  twistcli_debug:
+    description: Activate the twistlock debug mode
+    required: false
 outputs:
   results_file:
     description: File containing scan results

@@ -69,6 +69,7 @@ jobs:
 | `docker_tlscacert` | Path to the Docker CA certificate | No |  |
 | `docker_tlscert` | Path to the Docker client certificate | No |  |
 | `docker_tlskey` | Path to the Docker client private key | No |  |
+| `twistcli_debug` | Activate the debug flag for prisma cli (by default deactivated) | No |  |
 
 ### Outputs
 | Output | Description |
