@@ -281,7 +281,6 @@ async function scan() {
   const project = core.getInput('project');
   const twistcli_debug = core.getInput('twistcli_debug');
   const twistcli_publish = core.getInput('twistcli_publish');
-  console.log(`twistcli_publish: ${twistcli_publish}`);
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
 
@@ -336,10 +335,7 @@ async function scan() {
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
     }
-    core.setFailed(`twistcli_publish: ${twistcli_publish}`);
     if (twistcli_publish) {
-      console.log(`Entered twistcli_publish: ${twistcli_publish}`);
-      core.message(`Entered twistcli_publish: ${twistcli_publish}`);
       twistcliCmd = twistcliCmd.concat([`--publish ${twistcli_publish}`]);
     }
 

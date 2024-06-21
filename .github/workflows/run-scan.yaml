@@ -12,7 +12,7 @@ jobs:
           docker pull rancher/busybox:1.31.1
         shell: bash
 
-      - uses: raoganeshr/prisma-cloud-scan@b01d59f7e29161682710358990af8b6ca7a966ab
+      - uses: raoganeshr/prisma-cloud-scan@main
         with:
           pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
           pcc_user: ${{ secrets.PCC_USER }}
