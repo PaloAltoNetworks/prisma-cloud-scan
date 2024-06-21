@@ -281,7 +281,7 @@ async function scan() {
   const project = core.getInput('project');
   const twistcli_debug = core.getInput('twistcli_debug');
   const twistcli_publish = core.getInput('twistcli_publish');
-
+  console.log(`twistcli_publish: ${twistcli_publish}`);
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
 
