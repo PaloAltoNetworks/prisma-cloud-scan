@@ -311,8 +311,8 @@ async function scan() {
     if (TRUE_VALUES.includes(twistcli_debug)) {
       twistcliCmd = twistcliCmd.concat(['--debug']);
     }
-    if (TRUE_VALUES.includes(twistcli_publish)) {
-      twistcliCmd = twistcliCmd.concat(["--publish"]);
+    if (twistcli_publish) {
+      twistcliCmd = twistcliCmd.concat([`--publish ${twistcli_publish}`]);
     }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
