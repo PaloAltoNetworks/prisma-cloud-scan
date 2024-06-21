@@ -12,6 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: raoganeshr/prisma-cloud-scan@
+      - run: |
+          docker pull rancher/busybox:1.31.1
+        shell: bash
+
+      - uses: raoganeshr/prisma-cloud-scan@main
         with:
+          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
+          pcc_user: ${{ secrets.PCC_USER }}
+          pcc_pass: ${{ secrets.PCC_PASS }}
+          image_name: "rancher/busybox:1.31.1"
+          twistcli_publish: false
+          
           
