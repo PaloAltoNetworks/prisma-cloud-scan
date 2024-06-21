@@ -2,14 +2,12 @@
 # For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
 
 name: Scan Image
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - run: |
           docker pull rancher/busybox:1.31.1
         shell: bash
@@ -21,5 +19,3 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: "rancher/busybox:1.31.1"
           twistcli_publish: false
-          
-          
