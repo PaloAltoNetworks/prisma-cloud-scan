@@ -336,7 +336,9 @@ async function scan() {
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
     }
+    console.log(`twistcli_publish: ${twistcli_publish}`);
     if (twistcli_publish) {
+      console.log(`Entered twistcli_publish: ${twistcli_publish}`);
       twistcliCmd = twistcliCmd.concat([`--publish ${twistcli_publish}`]);
     }
 
@@ -365,3 +367,4 @@ if (require.main === module) {
     core.setFailed(err.message);
   }
 }
+console.log(`Invalid Console address: ${url}`);
