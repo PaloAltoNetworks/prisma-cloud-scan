@@ -280,6 +280,7 @@ async function scan() {
   const dockerTlsKey = core.getInput('docker_tlskey');
   const project = core.getInput('project');
   const twistcli_debug = core.getInput('twistcli_debug');
+  const twistcli_publish = core.getInput('twistcli_publish');
 
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
@@ -309,6 +310,9 @@ async function scan() {
     }
     if (TRUE_VALUES.includes(twistcli_debug)) {
       twistcliCmd = twistcliCmd.concat(['--debug']);
+    }
+    if (TRUE_VALUES.includes(twistcli_publish)) {
+      twistcliCmd = twistcliCmd.concat(["--publish"]);
     }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
