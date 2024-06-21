@@ -311,9 +311,6 @@ async function scan() {
     if (TRUE_VALUES.includes(twistcli_debug)) {
       twistcliCmd = twistcliCmd.concat(['--debug']);
     }
-    if (twistcli_publish) {
-      twistcliCmd = twistcliCmd.concat([`--publish ${twistcli_publish}`]);
-    }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
       `--address ${consoleUrl}`,
@@ -339,8 +336,11 @@ async function scan() {
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
     }
-    twistcliCmd = twistcliCmd.concat([imageName]);
+    if (twistcli_publish) {
+      twistcliCmd = twistcliCmd.concat([`--publish ${twistcli_publish}`]);
+    }
 
+    twistcliCmd = twistcliCmd.concat([imageName]);
     const exitCode = await exec(twistcliCmd.join(' '), undefined, {
       ignoreReturnCode: true,
     });
