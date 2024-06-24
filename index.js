@@ -336,7 +336,7 @@ async function scan() {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
     }
     if (twistcli_publish) {
-      twistcliCmd = twistcliCmd.concat([`--publish ${twistcli_publish}`]);
+      twistcliCmd = twistcliCmd.concat([`--publish=${twistcli_publish}`]);
     }
 
     twistcliCmd = twistcliCmd.concat([imageName]);
