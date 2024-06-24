@@ -14312,13 +14312,8 @@ async function scan() {
 }
 
 if (require.main === require.cache[eval('__filename')]) {
-  try {
-    scan();
-  } catch (err) {
-    core.setFailed(err.message);
-  }
+  scan().catch((err) => core.setFailed(err.message));
 }
-console.log(`Invalid Console address: ${url}`);
 })();
 
 module.exports = __webpack_exports__;
