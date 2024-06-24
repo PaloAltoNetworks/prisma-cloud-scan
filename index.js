@@ -358,10 +358,5 @@ async function scan() {
 }
 
 if (require.main === module) {
-  try {
-    scan();
-  } catch (err) {
-    core.setFailed(err.message);
-  }
+  scan().catch((err) => core.setFailed(err.message));
 }
-console.log(`Invalid Console address: ${url}`);
