@@ -45,6 +45,11 @@ inputs:
   twistcli_debug:
     description: Activate the twistlock debug mode
     required: false
+  twistcli_publish:
+    description: Publish the results to Prisma Cloud
+    default: true
+    required: false
+    type: boolean
 outputs:
   results_file:
     description: File containing scan results
