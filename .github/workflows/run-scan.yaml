@@ -18,4 +18,4 @@ jobs:
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: "rancher/busybox:1.31.1"
-          twistcli_publish: false
+          twistcli_publish: true
