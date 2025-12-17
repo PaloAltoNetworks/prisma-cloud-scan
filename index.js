@@ -39,7 +39,7 @@ async function authenticate(url, user, pass, httpProxy) {
         'Content-Type': 'application/json',
       },
       proxy: false,
-      httpsAgent: new HttpsProxyAgent(httpProxy),
+      httpsAgent: httpProxy ? new HttpsProxyAgent(httpProxy) : undefined,
       data: {
         username: user,
         password: pass,
@@ -72,7 +72,7 @@ async function getVersion(url, token, httpProxy) {
         'Authorization': `Bearer ${token}`,
       },
       proxy: false,
-      httpsAgent: new HttpsProxyAgent(httpProxy)
+      httpsAgent: httpProxy ? new HttpsProxyAgent(httpProxy) : undefined
     });
     return res.data;
   } catch (err) {
