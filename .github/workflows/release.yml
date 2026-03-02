@@ -1,15 +1,45 @@
-name: draft release
+name: Release Management
 
 on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
+  release:
+    types: [published]
 
 jobs:
   draft-release:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
       - uses: release-drafter/release-drafter@09c613e259eb8d4e7c81c2cb00618eb5fc4575a7 # v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-floating-tags:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update floating major and minor version tags
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          MAJOR=$(echo "$TAG" | cut -d. -f1)
+          MINOR=$(echo "$TAG" | cut -d. -f1,2)
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git tag -f "$MAJOR" "$TAG^{commit}"
+          git tag -f "$MINOR" "$TAG^{commit}"
+          git push origin "$MAJOR" --force
+          git push origin "$MINOR" --force
