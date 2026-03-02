@@ -71,6 +71,7 @@ jobs:
 | `docker_tlskey` | Path to the Docker client private key | No |  |
 | `twistcli_debug` | Activate the debug flag for prisma cli (by default deactivated) | No |  |
 | `twistcli_publish` | Publish the results to Prisma Cloud. Default is true. | No |  |
+| `tarball` | Path to the image tarball to scan instead of a live Docker image | No |  |
 
 ### Outputs
 | Output | Description |

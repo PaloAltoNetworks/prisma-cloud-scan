@@ -41167,7 +41167,7 @@ function formatSarifResults(results) {
         locations: [{
           physicalLocation: {
             artifactLocation: {
-              uri: `${imageName}`,
+              uri: `${finding.packagePath || imageName}`,
             },
             region: {
               startLine: 1,
@@ -41222,6 +41222,7 @@ async function scan() {
   const project = core.getInput('project');
   const twistcli_debug = core.getInput('twistcli_debug');
   const twistcli_publish = core.getInput('twistcli_publish');
+  const tarball = core.getInput('tarball');
   const resultsFile = core.getInput('results_file');
   const sarifFile = core.getInput('sarif_file');
 
@@ -41275,6 +41276,9 @@ async function scan() {
     }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
+    }
+    if (tarball) {
+      twistcliCmd = twistcliCmd.concat(['--tarball']);
     }
     if (twistcli_publish) {
       twistcliCmd = twistcliCmd.concat([`--publish=${twistcli_publish}`]);

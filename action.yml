@@ -50,6 +50,9 @@ inputs:
     default: true
     required: false
     type: boolean
+  tarball:
+    description: Path to the image tarball to scan instead of a live Docker image
+    required: false
 outputs:
   results_file:
     description: File containing scan results
