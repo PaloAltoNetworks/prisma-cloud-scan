@@ -57,6 +57,9 @@ inputs:
     description: Action to take on timeout (fail or success)
     required: false
     default: fail
+  tarball:
+    description: Path to the image tarball to scan instead of a live Docker image
+    required: false
 outputs:
   results_file:
     description: File containing scan results

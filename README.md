@@ -41,7 +41,7 @@ jobs:
 
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
-        if: ${{ always() }} # necessary if using failure thresholds in the image scan
+        if: ${{ !cancelled() }} # necessary if using failure thresholds in the image scan
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ steps.scan.outputs.sarif_file }}
@@ -73,6 +73,7 @@ jobs:
 | `twistcli_publish` | Publish the results to Prisma Cloud. Default is true. | No |  |
 | `timeout` | Timeout for the scan in seconds | No |  |
 | `on_timeout` | Action to take on timeout (fail or success) | No | `fail` |
+| `tarball` | Path to the image tarball to scan instead of a live Docker image | No |  |
 
 ### Outputs
 | Output | Description |
