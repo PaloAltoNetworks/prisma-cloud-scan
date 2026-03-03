@@ -5,6 +5,7 @@ const { exec } = require('@actions/exec');
 const tc = require('@actions/tool-cache');
 const os = require('os');
 const { HttpsProxyAgent } = require('https-proxy-agent');
+const { spawn } = require('child_process');
 
 const TRUE_VALUES = ['true', 'yes', 'y', '1'];
 
@@ -18,6 +19,8 @@ function joinUrlPath(...parts) {
   // Filter handles cases where Console URL pathname is '/' in order to avoid '//api/v1/etc/' (double slash)
   return '/' + parts.filter(part => part !== '/').map(part => part.replace(/(^\/|\/$)/g, '')).join('/');
 }
+
+class TimeoutError extends Error {}
 
 // Wrapper around 'authenticate' Console API endpoint
 async function authenticate(url, user, pass, httpProxy) {
@@ -312,32 +315,32 @@ async function scan() {
     let twistcliCmd = await getTwistcli(twistcliVersion, consoleUrl, token, os.platform(), os.arch());
     twistcliCmd = [twistcliCmd];
     if (httpProxy) {
-      twistcliCmd = twistcliCmd.concat([`--http-proxy ${httpProxy}`]);
+      twistcliCmd = twistcliCmd.concat(['--http-proxy', httpProxy]);
     }
     if (TRUE_VALUES.includes(twistcli_debug)) {
       twistcliCmd = twistcliCmd.concat(['--debug']);
     }
     twistcliCmd = twistcliCmd.concat([
       'images', 'scan',
-      `--address ${consoleUrl}`,
-      `--user ${username}`, `--password ${password}`,
-      `--output-file ${resultsFile}`,
+      '--address', consoleUrl,
+      '--user', username, '--password', password,
+      '--output-file', resultsFile,
       '--details',
     ]);
     if (dockerAddress) {
-      twistcliCmd = twistcliCmd.concat([`--docker-address ${dockerAddress}`]);
+      twistcliCmd = twistcliCmd.concat(['--docker-address', dockerAddress]);
     }
     if (dockerTlsCaCert) {
-      twistcliCmd = twistcliCmd.concat([`--docker-tlscacert ${dockerTlsCaCert}`]);
+      twistcliCmd = twistcliCmd.concat(['--docker-tlscacert', dockerTlsCaCert]);
     }
     if (dockerTlsCert) {
-      twistcliCmd = twistcliCmd.concat([`--docker-tlscert ${dockerTlsCert}`]);
+      twistcliCmd = twistcliCmd.concat(['--docker-tlscert', dockerTlsCert]);
     }
     if (dockerTlsKey) {
-      twistcliCmd = twistcliCmd.concat([`--docker-tlskey ${dockerTlsKey}`]);
+      twistcliCmd = twistcliCmd.concat(['--docker-tlskey', dockerTlsKey]);
     }
     if (project) {
-      twistcliCmd = twistcliCmd.concat([`--project ${project}`]);
+      twistcliCmd = twistcliCmd.concat(['--project', project]);
     }
     if (TRUE_VALUES.includes(containerized)) {
       twistcliCmd = twistcliCmd.concat(['--containerized']);
@@ -349,26 +352,34 @@ async function scan() {
     twistcliCmd = twistcliCmd.concat([imageName]);
 
     let exitCode;
-    const executeScan = async () => {
-      return await exec(twistcliCmd.join(' '), undefined, {
-        ignoreReturnCode: true,
+    let childProcess;
+    const executeScan = () => {
+      return new Promise((resolve, reject) => {
+        childProcess = spawn(twistcliCmd[0], twistcliCmd.slice(1), {
+          stdio: 'inherit'
+        });
+        childProcess.on('exit', (code) => resolve(code));
+        childProcess.on('error', (err) => reject(err));
       });
     };
 
     if (timeout) {
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => {
-          reject(new Error('Scan timed out'));
-        }, parseInt(timeout) * 1000);
+          reject(new TimeoutError('Scan timed out'));
+        }, parseInt(timeout, 10) * 1000);
       });
 
       try {
         exitCode = await Promise.race([executeScan(), timeoutPromise]);
       } catch (err) {
-        if (err.message === 'Scan timed out') {
+        if (err instanceof TimeoutError) {
+          if (childProcess) {
+            childProcess.kill();
+          }
           if (onTimeout === 'success') {
             core.warning('Scan timed out. Finishing with success, but no results will be generated.');
-            process.exit(0);
+            return;
           } else {
             throw err;
           }
