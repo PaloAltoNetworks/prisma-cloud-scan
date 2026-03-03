@@ -50,6 +50,13 @@ inputs:
     default: true
     required: false
     type: boolean
+  timeout:
+    description: Timeout for the scan in seconds
+    required: false
+  on_timeout:
+    description: Action to take on timeout (fail or success)
+    required: false
+    default: fail
   tarball:
     description: Path to the image tarball to scan instead of a live Docker image
     required: false
