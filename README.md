@@ -25,14 +25,14 @@ jobs:
 
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
 
       - name: Prisma Cloud image scan
         id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
+        uses: PaloAltoNetworks/prisma-cloud-scan@v1.9
         with:
           pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
           pcc_user: ${{ secrets.PCC_USER }}
@@ -42,7 +42,7 @@ jobs:
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
         if: ${{ !cancelled() }} # necessary if using failure thresholds in the image scan
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ${{ steps.scan.outputs.sarif_file }}
 ```
