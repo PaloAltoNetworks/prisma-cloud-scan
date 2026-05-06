@@ -22,6 +22,11 @@ jobs:
   build-and-scan:
     name: Build and scan image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # needed if you upload the sarif file
+      actions: read # needed if you upload the sarif file and workflow is in private repository
+      
 
     steps:
       - name: Check out the repository
@@ -95,6 +100,18 @@ The table of discovered vulnerabilities and compliance violations shows up in th
 
 ### GitHub code scanning alerts
 <img src="./images/pc_github_code_scanning.png">
+
+## Recommended permissions
+When using the `prisma-cloud-scan` action in your GitHub Actions workflow, it is recommended to set the following `GITHUB_TOKEN` permissions to ensure proper functionality:
+
+```yaml
+permissions:
+  contents: read
+  security-events: write # needed if you upload the sarif file
+  actions: read # needed if you upload the sarif file and workflow is in private repository
+```
+
+For more information about permissions necessary to upload the sarif file you can look at the [official documentation](https://docs.github.com/en/code-security/how-tos/find-and-fix-code-vulnerabilities/integrate-with-existing-tools/uploading-a-sarif-file-to-github#uploading-a-code-scanning-analysis-with-github-actions)
 
 ## Support
 Please read [SUPPORT.md](SUPPORT.md) for details on how to get support for this project.
